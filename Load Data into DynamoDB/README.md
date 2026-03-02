@@ -32,6 +32,7 @@ file:// then tells DynamoDB that the file is stored locally in the CloudShell en
 💡 How does DynamoDB know which table to store which data?  Each .json file you upload tells DynamoDB which table the items should go to!
 
 5. View and update your loaded data
+6. Delete your resources using the commands in delete-table.sh
 
 
 
