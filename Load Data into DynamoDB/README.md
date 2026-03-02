@@ -22,7 +22,7 @@ Architecture diagram:
 
    ls ... cat Forum.json
 
-   Load the data of all four files into DynamoDB using AWS CLI's batch-write-item command: use the load-data.sh script
+   Load the data of all four files into DynamoDB using AWS CLI's batch-write-item command: copy the load-data.sh commands to your CloudShell environment.
 
 
 The aws dynamodb batch-write-item command is used to load or insert multiple items into DynamoDB tables!
