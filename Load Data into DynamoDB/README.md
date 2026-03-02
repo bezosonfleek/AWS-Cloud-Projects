@@ -7,6 +7,7 @@ Architecture diagram:
    Create table, give it a name and partition key. Change the other settings according to your needs, use the least capacity for a test project: turn of auto-scaling, change provision
    capacity units to 1.
 2. Under actions Create Item, populate.
+   Enter the first entry using the management console... Create item, Add the name, Add attribute for example age and give a value...finish.
 3. Create DynamoDB tables with CloudShell
    Run the create-tables.sh script to create tables.
    Run the confirm-table.sh script to confirm the tables were actually created.
