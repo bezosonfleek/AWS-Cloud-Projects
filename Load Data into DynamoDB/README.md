@@ -9,8 +9,8 @@ Architecture diagram:
 2. Under actions Create Item, populate.
    Enter the first entry using the management console... Create item, Add the name, Add attribute for example age and give a value...finish.
 3. Create DynamoDB tables with CloudShell
-   Run the create-tables.sh script to create tables.
-   Run the confirm-table.sh script to confirm the tables were actually created.
+   Paste the create-tables.sh commands to your Cloudshell environment to create tables.
+   Paste the confirm-table.sh commands toyour Cloudshell environment to confirm the tables were actually created.
  
    Head back into your DynamoDB console and select the Tables tab and confirm the created tables.
 
