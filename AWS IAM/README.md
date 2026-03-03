@@ -9,13 +9,12 @@
 1. Launch EC2 instances
    - Name prod-name, add tag Key: Env, Value: production. Choose Free Tier eligible options since it is a test project. Proceed without key pair.
    - Name dev-name,add tag Key: Env, Value: production; second EC2 instance.
-
 2. Create an IAM policy
-   We are using the IAM policy to give permission to the development instance only.
+    We are using the IAM policy to give permission to the development instance only.
    - In IAM select policy and create. Paste the contents of policy.json there, this allows for access to the dev environment. Name the policy and create.
- 3. Create an Accout Alias
-    Allows for a friendly ID for other users onboarded to use
-    -On the right side of IAM dashboard, create account alias with name
+3. Create an Accout Alias
+   Allows for a friendly ID for other users onboarded to use
+   -On the right side of IAM dashboard, create account alias with name
 4. Create IAM Users & User Groups
    -Still in IAM, create a user group and name it. Ensure to attach the policy you created.
    -Create a user, add them to the group.
