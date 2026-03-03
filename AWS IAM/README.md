@@ -8,7 +8,7 @@
 
 1. Launch EC2 instances
    - Name prod-name, add tag Key: Env, Value: production. Choose Free Tier eligible options since it is a test project. Proceed without key pair.
-   - Name dev-name; second EC2 instance.
+   - Name dev-name,add tag Key: Env, Value: production; second EC2 instance.
 2. Create an IAM policy
    We are using the IAM policy to give permission to the development instance only.
    - In IAM select policy and create. Paste the contents of policy.json there, this allows for access to the dev environment. Name the policy and create.
