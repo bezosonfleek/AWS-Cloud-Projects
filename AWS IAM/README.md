@@ -17,11 +17,16 @@
 3. Create an Accout Alias
 
    Allows for a friendly ID for other users onboarded to use
+   
    -On the right side of IAM dashboard, create account alias with name
-5. Create IAM Users & User Groups
+   
+4. Create IAM Users & User Groups
+ 
    -Still in IAM, create a user group and name it. Ensure to attach the policy you created.
    -Create a user, add them to the group.
-6. Test access
+   
+5. Test access
+ 
    -Use the link to login as IAM user.
    -Once logged in, ensure you are in the same region as the one you created the instances.
    -Try to stop the production & development instances and notice the difference.
@@ -29,5 +34,6 @@
 Additional steps
 
 6. IAM Policy Simulator
-   -Used to validate policies without affecting resources
+
+ -Used to validate policies without affecting resources
    
