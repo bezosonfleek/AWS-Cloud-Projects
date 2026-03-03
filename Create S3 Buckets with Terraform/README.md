@@ -4,4 +4,5 @@ Terraform is a tool that helps you build and manage your cloud infrastructure us
 IaC is the practice of describing your cloud setup in plain text files instead of clicking through a web console. Terraform is an IaC tool.
 
 -Download Terraform
--Edit advanced system setting to add a system environment variable. 
+-On Windows; go to advanced system settings to add a system environment variable. 
+-
