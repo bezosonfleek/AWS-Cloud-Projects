@@ -14,8 +14,10 @@ Aimed at improving networking knowledge.
    -aws ec2 create-vpc --cidr-block 10.0.0.0/24 --query Vpc.VpcId --output text
    -aws ec2 create-tags --resources=VPC-ID --tags Key=Name,Value="Name-of-2nd-VPC"
    -aws ec2 create-subnet --vpc-id VPC-ID --cidr-block 10.0.0.0/25
-    It is important to note that the number after the slash in the CIDR block has to be larger than what we had for the VPC.
-   -
+    It is important to note that the number after the slash in the CIDR block has to be larger than what we had for the VPC CIDR block.
+   -aws ec2 create-internet-gateway
+   -aws ec2 attach-internet-gateway --vpc-id VPC-ID --internet-gateway-id IG-ID
+
+   A connection to your internet gateway should be visible in the Resource Map. 
 
 
-6. 
