@@ -31,6 +31,6 @@ In case of credentials error, use the commands in Powershell:
 
 - Launch S3 bucket using Terraform: terraform apply
 
-  Confirm in the management console that an S3 bucket is created. Use 'terraform destroy' to delete the bucket. 
+  Confirm in the management console that an S3 bucket is created. Use 'terraform destroy' to delete the bucket. Delete the access keys as well, since they are not in use. 
 
 - Upload S3 object with Terraform
