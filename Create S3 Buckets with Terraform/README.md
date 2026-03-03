@@ -9,3 +9,5 @@ IaC is the practice of describing your cloud setup in plain text files instead o
 -Execute the powershell commands in scripts.ps1 to create a working folder, navigate to it, confirm location and create main.tf
 
 -Define main.tf: Copy the code in main.tf to yours.
+
+You can make modifications using the documentation on terraform's site: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket
