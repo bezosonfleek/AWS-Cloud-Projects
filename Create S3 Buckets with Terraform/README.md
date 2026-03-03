@@ -5,4 +5,7 @@ IaC is the practice of describing your cloud setup in plain text files instead o
 
 -Download Terraform
 -On Windows; go to advanced system settings to add a system environment variable. 
--
+
+-Execute the powershell commands in scripts.ps1 to create a working folder, navigate to it, confirm location and create main.tf
+
+-Define main.tf
