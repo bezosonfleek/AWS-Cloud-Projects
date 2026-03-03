@@ -11,5 +11,19 @@
    - Name dev-name; second EC2 instance.
 2. Create an IAM policy
    We are using the IAM policy to give permission to the development instance only.
-   -
-3. 
+   - In IAM select policy and create. Paste the contents of policy.json there, this allows for access to the dev environment. Name the policy and create.
+ 3. Create an Accout Alias
+    Allows for a friendly ID for other users onboarded to use
+    -On the right side of IAM dashboard, create account alias with name
+4. Create IAM Users & User Groups
+   -Still in IAM, create a user group and name it. Ensure to attach the policy you created.
+   -Create a user, add them to the group.
+5. Test access
+   -Use the link to login as IAM user.
+   -Once logged in, ensure you are in the same region as the one you created the instances.
+   -Try to stop the production & development instances and notice the difference.
+
+Additional steps
+6. IAM Policy Simulator
+   -Used to validate policies without affecting resources
+   
