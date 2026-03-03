@@ -12,7 +12,7 @@
 2. Create an IAM policy
 
    We are using the IAM policy to give permission to the development instance only.
-   - In IAM select policy and create. Paste the contents of policy.json there, this allows for access to the dev environment. Name the policy and create.
+   - In IAM, select policy and create. Paste the contents of policy.json there, this allows for access to the dev environment. Name the policy and create.
 
 3. Create an Accout Alias
 
