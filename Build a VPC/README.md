@@ -20,4 +20,27 @@ Aimed at improving networking knowledge.
 
    A connection to your internet gateway should be visible in the Resource Map. 
 
+VPC Traffic Flow & Security
+
+<img width="772" height="423" alt="vpc-traffic-flow security" src="https://github.com/user-attachments/assets/8a863508-36b8-4982-92c0-4a8d13ed71f2" />
+
+1. Create a route table
+   -A route table is created for the VPC you created, you just need to remane it. Add destination 0.0.0.0/0 and selecct your internet gateway. Associate your route table with Public 1 subnet. The subnet is now public.
+2. Create a security group
+  -Create a new security group and select your VPC, add an inbound rule of HTTP from anywhere. Outbound traffic is allowed by default so we do not set this for now.
+3. Create a Network ACL
+  -Create and name acl, add associated VPC. Add inbound rule to allow all traffic, do the same for outbound. Add subnet association to your acl (Public 1 subnet).
+   Process flow: User -> Internet gateway -> VPC -> Route table -> Network ACL -> Public Subnet -> Security Group -> EC2 Instance -> Data sent.
+5. Track VPC resources
+   -Create VPCs in different regions using CloudShell
+    aws ec2 create-vpc --cidr-block 10.0.0.0/24 --query "Vpc.VpcId" --output text --tag-specifications 'ResourceType=vpc,Tags=[{Key=Name,Value=new-region-VPC}]' --region REGION-CODE
+   -Create gateway: aws ec2 create-internet-gateway --query "InternetGateway.InternetGatewayId" --output text --tag-specifications 'ResourceType=internet-gateway,Tags=[{Key=Name,Value="new-region-IG"}]' --region REGION-CODE
+   -Set up security group: aws ec2 create-security-group --query "GroupId" --output text  --description "New SG created to test creating an SG in another Region." --group-name new-region-sg --tag-specifications 'ResourceType=security-group,Tags=[{Key=Name,Value="new-region-sg"}]' --region REGION-CODE
+   -Head to the AWS Global View (important for managing multi-region deployments) - you can see all resources
+   -Delete resources:
+   aws ec2 delete-vpc --vpc-id VPC-ID
+   aws ec2 delete-security-group --group-id SG-ID
+   aws ec2 delete-internet-gateway --internet-gateway-id IG-ID 
+
+
 
