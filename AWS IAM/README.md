@@ -26,7 +26,9 @@ Allows for a friendly ID for other onboarded users to use.
 5. Test access
  
    -Use the link to login as IAM user.
+ 
    -Once logged in, ensure you are in the same region as the one you created the instances.
+
    -Try to stop the production & development instances and notice the difference.
 
 Additional steps
