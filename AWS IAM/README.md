@@ -15,7 +15,7 @@
    - In IAM select policy and create. Paste the contents of policy.json there, this allows for access to the dev environment. Name the policy and create.
 
 3. Create an Accout Alias
-   Allows for a friendly ID for other users onboarded to use
+    Allows for a friendly ID for other users onboarded to use
    -On the right side of IAM dashboard, create account alias with name
 4. Create IAM Users & User Groups
    -Still in IAM, create a user group and name it. Ensure to attach the policy you created.
