@@ -1,6 +1,6 @@
  AWS Identity and Access Management (IAM) 
 
- -In this mini-project, I'll launch an EC2 instance and control who has access to it by use if IAM policies and user groups
+ -In this mini-project, I'll launch two EC2 instances and control who has access to it by use of IAM policies and user groups
   This is aimed at improving knowledge of Cloud Security. 
 
  Diagrammatic representation: 
