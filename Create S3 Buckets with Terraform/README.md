@@ -1,1 +1,7 @@
-Automating the process of S3 creation.
+Automating the processes around S3.
+
+Terraform is a tool that helps you build and manage your cloud infrastructure using code. It is done in form of scripts instead of manually.
+IaC is the practice of describing your cloud setup in plain text files instead of clicking through a web console. Terraform is an IaC tool.
+
+-Download Terraform
+-Edit advanced system setting to add a system environment variable. 
