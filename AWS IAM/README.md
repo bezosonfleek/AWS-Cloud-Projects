@@ -15,12 +15,13 @@
    - In IAM select policy and create. Paste the contents of policy.json there, this allows for access to the dev environment. Name the policy and create.
 
 3. Create an Accout Alias
-    Allows for a friendly ID for other users onboarded to use
+
+   Allows for a friendly ID for other users onboarded to use
    -On the right side of IAM dashboard, create account alias with name
-4. Create IAM Users & User Groups
+5. Create IAM Users & User Groups
    -Still in IAM, create a user group and name it. Ensure to attach the policy you created.
    -Create a user, add them to the group.
-5. Test access
+6. Test access
    -Use the link to login as IAM user.
    -Once logged in, ensure you are in the same region as the one you created the instances.
    -Try to stop the production & development instances and notice the difference.
