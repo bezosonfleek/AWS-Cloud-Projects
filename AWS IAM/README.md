@@ -24,6 +24,7 @@
    -Try to stop the production & development instances and notice the difference.
 
 Additional steps
+
 6. IAM Policy Simulator
    -Used to validate policies without affecting resources
    
