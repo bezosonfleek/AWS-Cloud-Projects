@@ -3,7 +3,10 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "my_bucket" {
-  bucket = "unique-bucket-name" # Make sure this bucket name is globally unique by typing a long random number
+  bucket = "unique-bucket-name" # Make sure this bucket name is globally unique
+  tags = {
+    Environment = "Dev"
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "my_bucket_public_access_block" {
