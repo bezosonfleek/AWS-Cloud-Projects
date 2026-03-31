@@ -41,6 +41,3 @@ VPC Traffic Flow & Security
    aws ec2 delete-vpc --vpc-id VPC-ID
    aws ec2 delete-security-group --group-id SG-ID
    aws ec2 delete-internet-gateway --internet-gateway-id IG-ID 
-
-
-
