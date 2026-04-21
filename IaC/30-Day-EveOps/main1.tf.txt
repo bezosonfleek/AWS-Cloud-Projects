@@ -1,0 +1,18 @@
+provider "aws" {
+  region = "us-east-1"
+}
+resource "aws_s3_bucket" "sakora-777" {
+    bucket = "packetpulse-backup-index0"
+
+    tags = {
+      Name = "my s3"
+      Purpose = "resource block intro"
+    }
+}
+
+resource "aws_s3_bucket_ownership_controls" "sakora-777-acl" {
+    bucket = aws_s3_bucket.sakora-777.id
+    rule {
+        object_ownership = "BucketOwnerPreferred"
+    }   
+}

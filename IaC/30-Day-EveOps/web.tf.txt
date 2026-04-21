@@ -1,0 +1,52 @@
+resource "aws_vpc" "vpc-learning" {
+  cidr_block = "10.0.0.0/16"
+  tags = {
+    Name = "vpc-learning"
+  }
+}
+resource "aws_subnet" "subnet-learning-pub" {
+  vpc_id = aws_vpc.vpc-learning.id
+  cidr_block = "10.0.1.0/24"
+  availability_zone = "us-east-1a"
+  map_public_ip_on_launch = true
+  tags = {
+    Terraform = true
+  }
+}
+resource "aws_internet_gateway" "ig-learning" {
+  vpc_id = aws_vpc.vpc-learning.id
+}
+resource "aws_route_table" "rt-learning" {
+  vpc_id = aws_vpc.vpc-learning.id
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.ig-learning.id
+  }
+}
+resource "aws_route_table_association" "rta-learning" {
+  subnet_id = aws_subnet.subnet-learning-pub.id
+  route_table_id = aws_route_table.rt-learning.id
+}
+resource "aws_instance" "ec2-learning" {
+  ami = "ami-0ec10929233384c7f"
+  instance_type = "t3.micro"
+  subnet_id = aws_subnet.subnet-learning-pub.id 
+  vpc_security_group_ids = [aws_security_group.sg-learning.id]
+  tags = {
+    "Name" = "ec2-learning"
+  }
+}
+resource "aws_security_group" "sg-learning" {
+  ingress {
+    from_port = 0
+    to_port = 0
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
