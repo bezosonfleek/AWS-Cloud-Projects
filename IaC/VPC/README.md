@@ -1,0 +1,1 @@
+**Full VPC with private & public subnets plus mandatory networking: route tables, internet gateway...**
