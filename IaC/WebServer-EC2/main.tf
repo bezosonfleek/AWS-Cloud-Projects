@@ -3,10 +3,10 @@ provider "aws" {
 }
 
 resource "aws_instance" "tf-test" {
-  ami = "ami-0ec10929233384c7f"
+  ami = "ami-0ec10929233384c7f"  #ubuntu iinstance
   instance_type = "t3.micro"
-  vpc_security_group_ids = ["sg-0debc44f38d3afc62"]
-  subnet_id = "subnet-09d796779a939d9ba"
+  vpc_security_group_ids = ["xxxxxxxxxxx"]
+  subnet_id = "xxxxxxxxxxxx"
 user_data = <<-EOF
              #!/bin/bash
              apt install -y nginx
