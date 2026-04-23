@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_instance" "tf-test" {
-  ami = "ami-0ec10929233384c7f"  #ubuntu iinstance
+  ami = "ami-0ec10929233384c7f"  #ubuntu instance
   instance_type = "t3.micro"
   vpc_security_group_ids = ["xxxxxxxxxxx"]
   subnet_id = "xxxxxxxxxxxx"
