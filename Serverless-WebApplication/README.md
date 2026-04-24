@@ -44,4 +44,4 @@ This diagram illustrates a decoupled, serverless architecture that leverages AWS
 ---
 
 ## Author
-* **Project Mtaani / IT professional specializing in Cloud Native architecture and automation.**
+* **Geoffrey Sakora - in alignment with my project on the way / IT professional specializing in Cloud Native architecture and automation.**
