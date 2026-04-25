@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Serverless</title>
+</head>
+<body style="text-align: center; font-family: Arial, sans-serif;">
+    <h1>Lambda Form</h1>    
+
+    <form id="lambdaForm">
+        <div>
+            <label for="username">Username:</label> 
+            <input type="text" id="username" required>
+        </div>
+        <br>
+        <div>
+            <label for="email">Email:</label> 
+            <input type="email" id="email" required>
+        </div>
+        <br>
+        <button type="submit">Send to AWS</button>
+    </form>
+
+    <p id="responseMessage"></p>
+
+    <script>
+        document.getElementById('lambdaForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Stop page refresh
+            
+            const data = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value
+            };
+
+            // Replace this with your actual API Gateway Invoke URL
+            const API_URL = 'https://59wgxth5ua.execute-api.us-east-1.amazonaws.com/submit';
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    document.getElementById('responseMessage').innerText = "Data sent successfully!";
+                } else {
+                    document.getElementById('responseMessage').innerText = "Error sending data.";
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('responseMessage').innerText = "Network error.";
+            }
+        });
+    </script>
+</body>
+</html>
