@@ -1,19 +1,6 @@
 provider "aws" {
   region = "us-east-1"
-}
-<<<<<<< HEAD
-resource "aws_vpc" "test-vpc" {
-  tags = {
-    Name = "test-vpc"
-  }
-  cidr_block = "10.0.0.0/24"
-}
-
-resource "aws_subnet" "test-subnet" {
-  vpc_id = aws_vpc.test-vpc.id
-}
-#coming soon ...
-=======
+ }
 
 resource "aws_vpc" "test-vpc" {
   cidr_block = "10.0.0.0/24"
@@ -23,20 +10,20 @@ resource "aws_vpc" "test-vpc" {
 }
 
 resource "aws_subnet" "public-subnet-test" {
-  vpc.id = aws_vpc.test-vpc.id
+  vpc_id = aws_vpc.test-vpc.id
   cidr_block = "10.0.0.0/25"
   availability_zone = "us-east-1a"
-  #map_public_ip_on_launch = true 
+  map_public_ip_on_launch = true 
 }
 
-resource "aws_security_group" "private-sg-test" {
-  name = "private-sg-test"
+resource "aws_security_group" "public-sg-test" {
+  name = "public-sg-test"
   vpc_id = aws_vpc.test-vpc.id
   ingress {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] #tighten security
+    cidr_blocks = ["0.0.0.0/0"] #tighten security; my ip/32
   }
   egress{
     from_port = 0
@@ -52,9 +39,12 @@ resource "aws_internet_gateway" "ig-test" {
 
 resource "aws_route_table" "rt-public-test" {
  vpc_id = aws_vpc.test-vpc.id
+ tags = {
+   Name = "rt-public-test"
+ }
 }
 
-resource "aws_route" "public default" {
+resource "aws_route" "public-route" {
   route_table_id = aws_route_table.rt-public-test.id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id = aws_internet_gateway.ig-test.id
@@ -70,10 +60,9 @@ resource "aws_instance" "ec2-test" {
     Name = "ec2-test"
   }
 
-  ami = "ami-0c7217cdde317cfec"
+  ami = "ami-0ec10929233384c7f"
   instance_type = "t3.micro"
   subnet_id = aws_subnet.public-subnet-test.id
-  vpc_security_group_ids = [aws_security_group.private-sg-test.id]
+  vpc_security_group_ids = [aws_security_group.public-sg-test.id]
 }
-#to be completed - add private subnet, elasticbs
->>>>>>> 753d0e4c64f3167eb457c76b078bee91c56c0091
+#to be completed - add private subnet, elastic ip (try to print it out)
