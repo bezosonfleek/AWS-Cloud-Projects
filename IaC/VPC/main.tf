@@ -62,4 +62,4 @@ resource "aws_instance" "ec2-test" {
   subnet_id = aws_subnet.public-subnet-test.id
   vpc_security_group_ids = [aws_security_group.private-sg-test.id]
 }
-#to be completed
+#to be completed - add private subnet, elasticbs
