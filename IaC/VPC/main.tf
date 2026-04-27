@@ -11,7 +11,7 @@ resource "aws_vpc" "test-vpc" {
 
 resource "aws_subnet" "public-subnet-test" {
   vpc.id = aws_vpc.test-vpc.id
-  cidr_block = 10.0.0.0/25
+  cidr_block = "10.0.0.0/25"
   availability_zone = "us-east-1a"
   #map_public_ip_on_launch = true 
 }
@@ -23,13 +23,13 @@ resource "aws_security_group" "private-sg-test" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    source = ["0.0.0.0/0"] #tighten security
+    cidr_blocks = ["0.0.0.0/0"] #tighten security
   }
   egress{
     from_port = 0
     to_port = 0
     protocol = "-1"
-    cidr = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_instance" "ec2-test" {
   }
 
   ami = "ami-0c7217cdde317cfec"
-  instance_type = t3.micro
+  instance_type = "t3.micro"
   subnet_id = aws_subnet.public-subnet-test.id
   vpc_security_group_ids = [aws_security_group.private-sg-test.id]
 }
