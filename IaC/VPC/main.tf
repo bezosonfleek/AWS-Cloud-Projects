@@ -31,6 +31,7 @@ resource "aws_security_group" "private-sg-test" {
     protocol = "-1"
     cidr = ["0.0.0.0"]
   }
+}
 
 resource "aws_internet_gateway" "ig-test" {
   vpc_id = aws_vpc.test-vpc.id
@@ -47,7 +48,7 @@ resource "aws_route" "public default" {
 }
 
 resource "aws_route_table_association" "public_assoc" {
-  subnet_id = aws_vpc.test-vpc.id
+  subnet_id = aws_subnet.public-subnet-test.id 
   route_table_id = aws_route_table.rt-public-test.id
 }
 
@@ -55,8 +56,9 @@ resource"aws_instance" "ec2-test" {
   tags = {
     Name = "ec2-test"
   }
-  subnet_id = aws_vpc.test-vpc.id
-  type = t3.micro
+
   ami = "ami-0c7217cdde317cfec"
+  instance_type = t3.micro
+  subnet_id = aws_subnet.public-subnet-test.id
 }
 #to be completed
