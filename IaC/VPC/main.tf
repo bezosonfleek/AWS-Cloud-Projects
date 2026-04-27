@@ -60,5 +60,6 @@ resource "aws_instance" "ec2-test" {
   ami = "ami-0c7217cdde317cfec"
   instance_type = t3.micro
   subnet_id = aws_subnet.public-subnet-test.id
+  vpc_security_group_ids = []
 }
 #to be completed
