@@ -51,4 +51,12 @@ resource "aws_route_table_association" "public_assoc" {
   route_table_id = aws_route_table.rt-public-test.id
 }
 
+resource"aws_instance" "ec2-test" {
+  tags = {
+    Name = "ec2-test"
+  }
+  subnet_id = aws_vpc.test-vpc.id
+  type = t3.micro
+  ami = "ami-0c7217cdde317cfec"
+}
 #to be completed
