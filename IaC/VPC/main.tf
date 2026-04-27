@@ -29,7 +29,7 @@ resource "aws_security_group" "private-sg-test" {
     from_port = 0
     to_port = 0
     protocol = "-1"
-    cidr = ["0.0.0.0"]
+    cidr = ["0.0.0.0/0"]
   }
 }
 
