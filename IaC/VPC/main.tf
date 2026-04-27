@@ -13,6 +13,7 @@ resource "aws_subnet" "public-subnet-test" {
   vpc.id = aws_vpc.test-vpc.id
   cidr_block = 10.0.0.0/25
   availability_zone = "us-east-1a"
+  #map_public_ip_on_launch = true 
 }
 
 resource "aws_security_group" "private-sg-test" {
