@@ -13,10 +13,6 @@ resource "aws_subnet" "public-subnet-test" {
   vpc.id = aws_vpc.test-vpc.id
 }
 
-resource "aws_subnet" "public-subnet-test" {
-  vpc.id = aws_vpc.test-vpc.id
-}
-
 resource "aws_security_group" "private-sg-test" {
   vpc_id = aws_vpc.test-vpc.id
   ingress {
