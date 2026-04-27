@@ -18,8 +18,14 @@ resource "aws_subnet" "public-subnet-test" {
 }
 
 resource "aws_security_group" "private-sg-test" {
+  vpc_id = aws_vpc.test-vpc.id
   ingress {
-  allow = 22
+  from_port = 22
+  to_port = 22
+  protocol = tcp
+  source = 0.0.0.0 #tighten security
+  }
+  egress{
   }
 
 #coming soon ...
