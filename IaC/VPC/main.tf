@@ -52,7 +52,7 @@ resource "aws_route_table_association" "public_assoc" {
   route_table_id = aws_route_table.rt-public-test.id
 }
 
-resource"aws_instance" "ec2-test" {
+resource "aws_instance" "ec2-test" {
   tags = {
     Name = "ec2-test"
   }
