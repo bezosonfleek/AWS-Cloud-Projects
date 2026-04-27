@@ -3,25 +3,51 @@ provider "aws" {
 }
 
 resource "aws_vpc" "test-vpc" {
-  cidr_block = 10.0.0.0/24
+  cidr_block = "10.0.0.0/24"
   tags = {
-    Name = test-vpc
+    Name = "test-vpc"
   }
 }
 
 resource "aws_subnet" "public-subnet-test" {
   vpc.id = aws_vpc.test-vpc.id
+  cidr_block = 10.0.0.0/25
+  availability_zone = "us-east-1a"
 }
 
 resource "aws_security_group" "private-sg-test" {
+  name = "private-sg-test"
   vpc_id = aws_vpc.test-vpc.id
   ingress {
-  from_port = 22
-  to_port = 22
-  protocol = tcp
-  source = 0.0.0.0 #tighten security
+    from_port = 22
+    to_port = 22
+    protocol = tcp
+    source = ["0.0.0.0"] #tighten security
   }
   egress{
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr = ["0.0.0.0"]
   }
 
-#coming soon ...
+resource "aws_internet_gateway" "ig-test" {
+  vpc_id = aws_vpc.test-vpc.id
+}
+
+resource "aws_route_table" "rt-public-test" {
+ vpc_id = aws_vpc.test-vpc.id
+}
+
+resource "aws_route" "public default" {
+  route_table_id = aws_route_table.rt-public-test.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id = aws_internet_gateway.ig-test.id
+}
+
+resource "aws_route_table_association" "public_assoc" {
+  subnet_id = aws_vpc.test-vpc.id
+  route_table_id = aws_route_table.rt-public-test.id
+}
+
+#to be completed
