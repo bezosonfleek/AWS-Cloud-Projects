@@ -63,6 +63,6 @@ resource "aws_instance" "ec2-test" {
   ami = "ami-0ec10929233384c7f"
   instance_type = "t3.micro"
   subnet_id = aws_subnet.public-subnet-test.id
-  vpc_security_group_ids = [aws_security_group.public-sg-test.id]
+  vpc_security_group_ids = [aws_security_group.public-sg-test.id] 
 }
 #to be completed - add private subnet, elastic ip (try to print it out)
