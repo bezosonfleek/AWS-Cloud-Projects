@@ -1,2 +1,1 @@
-# Learning DevOps
-# Learning CI/CD
+# Learning DevOps through CI/CD
