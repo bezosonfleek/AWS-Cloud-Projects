@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bundesliga Squads 2025/26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bayern-red: #DC052D;
+    --bayern-dark: #1a0005;
+    --bayern-mid: #8B0018;
+    --dortmund-yellow: #FDE100;
+    --dortmund-dark: #0a0800;
+    --dortmund-mid: #B39E00;
+    --divider: #1a1a1a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0d0d0d;
+    color: #fff;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    padding: 3rem 2rem 2rem;
+    position: relative;
+    border-bottom: 1px solid #222;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(220,5,45,0.08) 0%, transparent 50%, rgba(253,225,0,0.08) 100%);
+    pointer-events: none;
+  }
+
+  .header-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #666;
+    border: 1px solid #333;
+    padding: 0.3rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1.2rem;
+  }
+
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    letter-spacing: 0.08em;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  header h1 .red { color: var(--bayern-red); }
+  header h1 .yellow { color: var(--dortmund-yellow); }
+
+  header p {
+    font-size: 0.8rem;
+    color: #555;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* PITCH DIVIDER */
+  .pitch-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .pitch-line::before,
+  .pitch-line::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+  }
+
+  .pitch-line::before { background: linear-gradient(to right, transparent, var(--bayern-red)); }
+  .pitch-line::after  { background: linear-gradient(to left, transparent, var(--dortmund-yellow)); }
+
+  .vs-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    color: #444;
+    border: 1px solid #2a2a2a;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* MAIN GRID */
+  .squads {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: calc(100vh - 180px);
+  }
+
+  /* TEAM PANEL */
+  .team-panel {
+    padding: 2.5rem 2rem 4rem;
+    position: relative;
+  }
+
+  .team-panel.bayern {
+    border-right: 1px solid #1e1e1e;
+    background: radial-gradient(ellipse at top left, rgba(220,5,45,0.07) 0%, transparent 60%);
+  }
+
+  .team-panel.dortmund {
+    background: radial-gradient(ellipse at top right, rgba(253,225,0,0.06) 0%, transparent 60%);
+  }
+
+  /* TEAM HEADER */
+  .team-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #1e1e1e;
+  }
+
+  .club-crest {
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+  }
+
+  .team-info { flex: 1; }
+
+  .team-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.06em;
+    line-height: 1;
+  }
+
+  .bayern .team-name { color: var(--bayern-red); }
+  .dortmund .team-name { color: var(--dortmund-yellow); }
+
+  .team-meta {
+    font-size: 0.7rem;
+    color: #555;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  .squad-count {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .bayern .squad-count { color: var(--bayern-red); }
+  .dortmund .squad-count { color: var(--dortmund-yellow); }
+
+  .squad-count-label {
+    font-size: 0.6rem;
+    color: #444;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* POSITION SECTIONS */
+  .position-group {
+    margin-bottom: 1.8rem;
+  }
+
+  .position-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 3px;
+    display: inline-block;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+  }
+
+  .bayern .position-label {
+    background: rgba(220,5,45,0.15);
+    color: #ff4d6d;
+    border: 1px solid rgba(220,5,45,0.3);
+  }
+
+  .dortmund .position-label {
+    background: rgba(253,225,0,0.1);
+    color: var(--dortmund-yellow);
+    border: 1px solid rgba(253,225,0,0.25);
+  }
+
+  /* PLAYER ROWS */
+  .player-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .player-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 6px;
+    transition: background 0.15s;
+    cursor: default;
+  }
+
+  .player-row:hover { background: rgba(255,255,255,0.04); }
+
+  .player-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    width: 26px;
+    text-align: right;
+    flex-shrink: 0;
+    opacity: 0.35;
+  }
+
+  .player-name {
+    flex: 1;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #e0e0e0;
+  }
+
+  .player-nat {
+    font-size: 0.65rem;
+    color: #444;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .captain-badge {
+    font-size: 0.55rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    text-transform: uppercase;
+  }
+
+  .bayern .captain-badge {
+    background: rgba(220,5,45,0.2);
+    color: #ff4d6d;
+    border: 1px solid rgba(220,5,45,0.35);
+  }
+
+  .dortmund .captain-badge {
+    background: rgba(253,225,0,0.15);
+    color: var(--dortmund-yellow);
+    border: 1px solid rgba(253,225,0,0.3);
+  }
+
+  /* FOOTER STATS BAR */
+  .stats-bar {
+    background: #111;
+    border-top: 1px solid #1e1e1e;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+
+  .stat-block {
+    padding: 1.2rem 2rem;
+    display: flex;
+    gap: 2rem;
+  }
+
+  .stat-block.right { justify-content: flex-end; }
+
+  .stat-item { text-align: center; }
+
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  .stat-block.left .stat-val { color: var(--bayern-red); }
+  .stat-block.right .stat-val { color: var(--dortmund-yellow); }
+
+  .stat-lbl {
+    font-size: 0.6rem;
+    color: #444;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+
+  .stat-center {
+    padding: 1.2rem;
+    text-align: center;
+    font-size: 0.6rem;
+    color: #333;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #0d0d0d; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+
+  @media (max-width: 768px) {
+    .squads { grid-template-columns: 1fr; }
+    .team-panel.bayern { border-right: none; border-bottom: 1px solid #1e1e1e; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .stat-center { display: none; }
+    .stat-block.right { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-badge">Bundesliga 2025 / 26 · Squad Roster</div>
+  <h1><span class="red">Bayern</span> &nbsp;·&nbsp; <span class="yellow">BVB</span></h1>
+  <p>FC Bayern München &nbsp;·&nbsp; Borussia Dortmund</p>
+</header>
+
+<div class="pitch-line"><span class="vs-badge">Full Squads</span></div>
+
+<!-- SQUADS GRID -->
+<div class="squads">
+
+  <!-- ========== BAYERN MUNICH ========== -->
+  <div class="team-panel bayern">
+    <div class="team-header">
+      <!-- Bayern crest SVG -->
+      <svg class="club-crest" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="26" cy="26" r="25" fill="#DC052D" stroke="#8B0018" stroke-width="1"/>
+        <circle cx="26" cy="26" r="19" fill="none" stroke="#fff" stroke-width="1.5"/>
+        <rect x="18" y="10" width="16" height="12" fill="#fff"/>
+        <rect x="18" y="10" width="8" height="6" fill="#003DA5"/>
+        <rect x="26" y="16" width="8" height="6" fill="#003DA5"/>
+        <rect x="18" y="16" width="8" height="6" fill="#fff"/>
+        <rect x="26" y="10" width="8" height="6" fill="#fff"/>
+        <text x="26" y="38" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="7" font-weight="900" fill="#fff" letter-spacing="0.5">FCB</text>
+      </svg>
+      <div class="team-info">
+        <div class="team-name">FC Bayern München</div>
+        <div class="team-meta">Coach: Vincent Kompany · Allianz Arena</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="squad-count">25</div>
+        <div class="squad-count-label">Players</div>
+      </div>
+    </div>
+
+    <!-- GOALKEEPERS -->
+    <div class="position-group">
+      <span class="position-label">Goalkeepers</span>
+      <div class="player-list">
+        <div class="player-row">
+          <span class="player-num">1</span>
+          <span class="player-name">Manuel Neuer <span class="captain-badge">Captain</span></span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">26</span>
+          <span class="player-name">Sven Ulreich</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">40</span>
+          <span class="player-name">Jonas Urbig</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">48</span>
+          <span class="player-name">Leon Klanac</span>
+          <span class="player-nat">GER</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEFENDERS -->
+    <div class="position-group">
+      <span class="position-label">Defenders</span>
+      <div class="player-list">
+        <div class="player-row">
+          <span class="player-num">2</span>
+          <span class="player-name">Dayot Upamecano</span>
+          <span class="player-nat">FRA</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">3</span>
+          <span class="player-name">Min-jae Kim</span>
+          <span class="player-nat">KOR</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">4</span>
+          <span class="player-name">Jonathan Tah</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">19</span>
+          <span class="player-name">Alphonso Davies</span>
+          <span class="player-nat">CAN</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">21</span>
+          <span class="player-name">Hiroki Ito</span>
+          <span class="player-nat">JPN</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">22</span>
+          <span class="player-name">Raphaël Guerreiro</span>
+          <span class="player-nat">POR</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">44</span>
+          <span class="player-name">Josip Stanišić</span>
+          <span class="player-nat">CRO</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIDFIELDERS -->
+    <div class="position-group">
+      <span class="position-label">Midfielders</span>
+      <div class="player-list">
+        <div class="player-row">
+          <span class="player-num">6</span>
+          <span class="player-name">Joshua Kimmich</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">8</span>
+          <span class="player-name">Leon Goretzka</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">10</span>
+          <span class="player-name">Jamal Musiala</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">20</span>
+          <span class="player-name">Tom Bischof</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">27</span>
+          <span class="player-name">Konrad Laimer</span>
+          <span class="player-nat">AUT</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">39</span>
+          <span class="player-name">Aleksandar Pavlović</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">45</span>
+          <span class="player-name">Boubacar Ndiaye</span>
+          <span class="player-nat">SEN</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORWARDS -->
+    <div class="position-group">
+      <span class="position-label">Forwards</span>
+      <div class="player-list">
+        <div class="player-row">
+          <span class="player-num">7</span>
+          <span class="player-name">Serge Gnabry</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">9</span>
+          <span class="player-name">Harry Kane</span>
+          <span class="player-nat">ENG</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">11</span>
+          <span class="player-name">Nicolas Jackson</span>
+          <span class="player-nat">SEN</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">14</span>
+          <span class="player-name">Luis Díaz</span>
+          <span class="player-nat">COL</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">17</span>
+          <span class="player-name">Michael Olise</span>
+          <span class="player-nat">FRA</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">36</span>
+          <span class="player-name">Gabriel Karl</span>
+          <span class="player-nat">GER</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== BORUSSIA DORTMUND ========== -->
+  <div class="team-panel dortmund">
+    <div class="team-header">
+      <!-- Dortmund crest SVG -->
+      <svg class="club-crest" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="26" cy="26" r="25" fill="#FDE100" stroke="#B39E00" stroke-width="1"/>
+        <circle cx="26" cy="26" r="19" fill="none" stroke="#000" stroke-width="1.5"/>
+        <text x="26" y="23" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="8" font-weight="900" fill="#000">BVB</text>
+        <text x="26" y="34" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="6" font-weight="900" fill="#000">09</text>
+      </svg>
+      <div class="team-info">
+        <div class="team-name">Borussia Dortmund</div>
+        <div class="team-meta">Coach: Niko Kovač · Signal Iduna Park</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="squad-count">24</div>
+        <div class="squad-count-label">Players</div>
+      </div>
+    </div>
+
+    <!-- GOALKEEPERS -->
+    <div class="position-group">
+      <span class="position-label">Goalkeepers</span>
+      <div class="player-list">
+        <div class="player-row">
+          <span class="player-num">1</span>
+          <span class="player-name">Gregor Kobel</span>
+          <span class="player-nat">SUI</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">30</span>
+          <span class="player-name">Patrick Drewes</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">31</span>
+          <span class="player-name">Silas Ostrzinski</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">33</span>
+          <span class="player-name">Alexander Meyer</span>
+          <span class="player-nat">GER</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEFENDERS -->
+    <div class="position-group">
+      <span class="position-label">Defenders</span>
+      <div class="player-list">
+        <div class="player-row">
+          <span class="player-num">2</span>
+          <span class="player-name">Yan Couto</span>
+          <span class="player-nat">BRA</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">3</span>
+          <span class="player-name">Waldemar Anton</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">4</span>
+          <span class="player-name">Nico Schlotterbeck <span class="captain-badge">Vice-Captain</span></span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">5</span>
+          <span class="player-name">Ramy Bensebaini</span>
+          <span class="player-nat">ALG</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">24</span>
+          <span class="player-name">Daniel Svensson</span>
+          <span class="player-nat">SWE</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">25</span>
+          <span class="player-name">Niklas Süle</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">26</span>
+          <span class="player-name">Julian Ryerson</span>
+          <span class="player-nat">NOR</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">39</span>
+          <span class="player-name">Filippo Mané</span>
+          <span class="player-nat">ITA</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">42</span>
+          <span class="player-name">Almugera Kabar</span>
+          <span class="player-nat">GER</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIDFIELDERS -->
+    <div class="position-group">
+      <span class="position-label">Midfielders</span>
+      <div class="player-list">
+        <div class="player-row">
+          <span class="player-num">6</span>
+          <span class="player-name">Salih Özcan</span>
+          <span class="player-nat">TUR</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">7</span>
+          <span class="player-name">Jobe Bellingham</span>
+          <span class="player-nat">ENG</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">8</span>
+          <span class="player-name">Felix Nmecha</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">10</span>
+          <span class="player-name">Julian Brandt <span class="captain-badge">3rd Captain</span></span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">17</span>
+          <span class="player-name">Carney Chukwuemeka</span>
+          <span class="player-nat">ENG</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">20</span>
+          <span class="player-name">Marcel Sabitzer</span>
+          <span class="player-nat">AUT</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">23</span>
+          <span class="player-name">Emre Can <span class="captain-badge">Captain</span></span>
+          <span class="player-nat">GER</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORWARDS -->
+    <div class="position-group">
+      <span class="position-label">Forwards</span>
+      <div class="player-list">
+        <div class="player-row">
+          <span class="player-num">9</span>
+          <span class="player-name">Serhou Guirassy</span>
+          <span class="player-nat">GUI</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">14</span>
+          <span class="player-name">Maximilian Beier</span>
+          <span class="player-nat">GER</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">21</span>
+          <span class="player-name">Fábio Silva</span>
+          <span class="player-nat">POR</span>
+        </div>
+        <div class="player-row">
+          <span class="player-num">27</span>
+          <span class="player-name">Karim Adeyemi</span>
+          <span class="player-nat">GER</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-block left">
+    <div class="stat-item">
+      <div class="stat-val">33</div>
+      <div class="stat-lbl">Kane Goals</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">1st</div>
+      <div class="stat-lbl">Bundesliga</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">35th</div>
+      <div class="stat-lbl">Title</div>
+    </div>
+  </div>
+  <div class="stat-center">Bundesliga 2025 / 26</div>
+  <div class="stat-block right">
+    <div class="stat-item">
+      <div class="stat-val">16</div>
+      <div class="stat-lbl">Guirassy Goals</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">2nd</div>
+      <div class="stat-lbl">Bundesliga</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">UCL</div>
+      <div class="stat-lbl">KO Playoffs</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
