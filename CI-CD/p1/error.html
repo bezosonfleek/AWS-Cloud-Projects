@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Bundesliga Squads</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bayern-red: #DC052D;
+    --dortmund-yellow: #FDE100;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0d0d0d;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* HEADER — same as main site */
+  header {
+    text-align: center;
+    padding: 2rem 2rem 1.5rem;
+    border-bottom: 1px solid #222;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(220,5,45,0.08) 0%, transparent 50%, rgba(253,225,0,0.08) 100%);
+    pointer-events: none;
+  }
+
+  .header-badge {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #666;
+    border: 1px solid #333;
+    padding: 0.3rem 1rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+
+  header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 4rem);
+    letter-spacing: 0.08em;
+    line-height: 1;
+  }
+
+  .red  { color: var(--bayern-red); }
+  .yellow { color: var(--dortmund-yellow); }
+
+  /* PITCH LINE */
+  .pitch-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.2rem 2rem;
+    border-bottom: 1px solid #1a1a1a;
+    flex-shrink: 0;
+  }
+
+  .pitch-line::before { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--bayern-red)); }
+  .pitch-line::after  { content: ''; flex: 1; height: 1px; background: linear-gradient(to left,  transparent, var(--dortmund-yellow)); }
+
+  .vs-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.15em;
+    color: #444;
+    border: 1px solid #2a2a2a;
+    padding: 0.3rem 0.8rem;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* MAIN ERROR AREA */
+  .error-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 3rem 2rem;
+    overflow: hidden;
+  }
+
+  /* Split background glow */
+  .error-stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 50% 70% at 20% 50%, rgba(220,5,45,0.09) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 70% at 80% 50%, rgba(253,225,0,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* Vertical divider */
+  .error-stage::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, #1e1e1e 20%, #1e1e1e 80%, transparent);
+  }
+
+  /* BIG 404 */
+  .four-oh-four {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(8rem, 22vw, 18rem);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+    user-select: none;
+
+    /* Split-colour via gradient */
+    background: linear-gradient(90deg,
+      var(--bayern-red) 0%,
+      var(--bayern-red) 48%,
+      #2a2a2a 48%,
+      #2a2a2a 52%,
+      var(--dortmund-yellow) 52%,
+      var(--dortmund-yellow) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .error-tagline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1rem, 3vw, 1.8rem);
+    letter-spacing: 0.25em;
+    color: #333;
+    margin-top: 1rem;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+
+  .error-desc {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.7;
+    text-align: center;
+    max-width: 38ch;
+    margin-top: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* OFFSIDE BADGE */
+  .offside-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #222;
+    border-radius: 6px;
+    padding: 0.5rem 1.2rem;
+    margin-top: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .offside-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bayern-red);
+    animation: blink 1.4s ease-in-out infinite;
+  }
+
+  .offside-text {
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #555;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  /* BACK LINK */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 2rem;
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #444;
+    border: 1px solid #222;
+    padding: 0.6rem 1.5rem;
+    border-radius: 4px;
+    position: relative;
+    z-index: 1;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+
+  .back-link:hover {
+    color: #fff;
+    border-color: #444;
+    background: rgba(255,255,255,0.04);
+  }
+
+  .back-link svg {
+    width: 12px;
+    height: 12px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: #111;
+    border-top: 1px solid #1e1e1e;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .stat-block { padding: 1.2rem 2rem; display: flex; gap: 2rem; }
+  .stat-block.right { justify-content: flex-end; }
+
+  .stat-item { text-align: center; }
+
+  .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  .stat-block.left  .stat-val { color: var(--bayern-red); }
+  .stat-block.right .stat-val { color: var(--dortmund-yellow); }
+
+  .stat-lbl {
+    font-size: 0.6rem;
+    color: #444;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+  }
+
+  .stat-center {
+    padding: 1.2rem;
+    text-align: center;
+    font-size: 0.6rem;
+    color: #333;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .stat-center { display: none; }
+    .four-oh-four { font-size: 28vw; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Bundesliga 2025 / 26 · Squad Roster</div>
+  <h1><span class="red">Bayern</span> &nbsp;·&nbsp; <span class="yellow">BVB</span></h1>
+</header>
+
+<div class="pitch-line"><span class="vs-badge">Error</span></div>
+
+<div class="error-stage">
+  <div class="four-oh-four">404</div>
+  <div class="error-tagline">Player Not Found</div>
+  <p class="error-desc">The page you're looking for has been transferred, put on loan, or never played here. Check the squad list and try again.</p>
+
+  <div class="offside-badge">
+    <span class="offside-dot"></span>
+    <span class="offside-text">Offside — page does not exist</span>
+  </div>
+
+  <a class="back-link" href="bundesliga-squads.html">
+    <svg viewBox="0 0 16 16"><polyline points="10 4 6 8 10 12"/></svg>
+    Back to squad list
+  </a>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-block left">
+    <div class="stat-item">
+      <div class="stat-val">33</div>
+      <div class="stat-lbl">Kane Goals</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">1st</div>
+      <div class="stat-lbl">Bundesliga</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">35th</div>
+      <div class="stat-lbl">Title</div>
+    </div>
+  </div>
+  <div class="stat-center">Bundesliga 2025 / 26</div>
+  <div class="stat-block right">
+    <div class="stat-item">
+      <div class="stat-val">16</div>
+      <div class="stat-lbl">Guirassy Goals</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">2nd</div>
+      <div class="stat-lbl">Bundesliga</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-val">UCL</div>
+      <div class="stat-lbl">KO Playoffs</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
