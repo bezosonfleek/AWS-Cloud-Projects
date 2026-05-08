@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+
+  # ── Container 1: Flask Web App ─────────────────────────────────────────────
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: db          # refers to the 'db' service below
+      DB_NAME: notesdb
+      DB_USER: notesuser
+      DB_PASSWORD: secret
+    depends_on:
+      db:
+        condition: service_healthy   # wait until Postgres is actually ready
+
+  # ── Container 2: PostgreSQL Database ──────────────────────────────────────
+  db:
+    image: postgres:16-alpine        # official image, no custom build needed
+    environment:
+      POSTGRES_DB: notesdb
+      POSTGRES_USER: notesuser
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - notes_data:/var/lib/postgresql/data   # persist data here
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notesuser -d notesdb"]
+      interval: 5s
+      retries: 5
+
+  # ── Container 3: Adminer (DB GUI) ─────────────────────────────────────────
+  adminer:
+    image: adminer                   # lightweight DB browser UI
+    ports:
+      - "8080:8080"                  # visit http://localhost:8080
+
+# ── Named volume — survives container restarts and rebuilds ─────────────────
+volumes:
+  notes_data:
