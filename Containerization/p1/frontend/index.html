@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;display: flex;flex-direction: column;
+            align-items: center;justify-content: center;height: 100vh;margin: 0;color: #1c1e21;}
+        h1 {margin-bottom: 20px;font-weight: 600;}
+        #backend-response {background: white;padding: 1.5rem 2rem;border-radius: 8px;box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);min-width: 250px;text-align: center;font-weight: 500;}
+        .error {color: #d93025;border-left: 4px solid #d93025;}
+    </style>
+</head>
+<body>
+    <h1>Multi-tier project</h1>
+    <p id="backend-1">Loading data from backend...</p>
+    <script>
+fetch('http://backend-right:5001/data') // Fetch the data from your Flask backend
+  .then(response => response.json())
+  .then(data => {
+    console.log(data.message); // This will print "Hello from the backend!"
+    document.getElementById('backend-response').innerText = data.message;
+  })
+  .catch(error => console.error('The pipe is broken:', error));
+    </script>
+</body>
+</html>
