@@ -1,1 +1,1 @@
-subnet_prefix = ["10.0.0.0/25", "10.0.0.128/25"]
+subnet_prefix = [{cidr_block = "10.0.0.0/25", name = "public-subnet-test"}, {cidr_block = "10.0.0.128/25", name = "private-subnet-test"}]
