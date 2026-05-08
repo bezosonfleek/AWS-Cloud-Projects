@@ -20,10 +20,16 @@ resource "aws_security_group" "public-sg-test" {
   name = "public-sg-test"
   vpc_id = aws_vpc.test-vpc.id
   ingress {
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] #tighten security; my ip/32
+  }
+  ingress {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] #tighten security; my ip/32
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress{
     from_port = 0
@@ -32,6 +38,8 @@ resource "aws_security_group" "public-sg-test" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+# *Consider adding network interface
 
 resource "aws_internet_gateway" "ig-test" {
   vpc_id = aws_vpc.test-vpc.id
@@ -60,9 +68,17 @@ resource "aws_instance" "ec2-test" {
     Name = "ec2-test"
   }
 
-  ami = "ami-0ec10929233384c7f"
+  ami = "ami-091138d0f0d41ff90"
   instance_type = "t3.micro"
   subnet_id = aws_subnet.public-subnet-test.id
   vpc_security_group_ids = [aws_security_group.public-sg-test.id] 
+
+  user_data = <<-EOF
+              #!/bin/bash
+              apt-get install -y nginx
+              systemctl start nginx
+              systemctl enable nginx
+              echo "<h1>Congrats! Terraform knowledge improved!</h1>" > /var/www/html/index.html
+              EOF
 }
 #to be completed - add private subnet, elastic ip (try to print it out)
