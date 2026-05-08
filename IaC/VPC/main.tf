@@ -2,6 +2,12 @@ provider "aws" {
   region = "us-east-1"
  }
 
+variable "subnet_prefix" {
+  description = "cidr block for public subnet"
+  #default = "10.0.0.100/28"
+  #type = string 
+}
+
 resource "aws_vpc" "test-vpc" {
   cidr_block = "10.0.0.0/24"
   tags = {
@@ -11,9 +17,22 @@ resource "aws_vpc" "test-vpc" {
 
 resource "aws_subnet" "public-subnet-test" {
   vpc_id = aws_vpc.test-vpc.id
-  cidr_block = "10.0.0.0/25"
+  cidr_block = var.subnet_prefix[0] # initially cidr_block = "10.0.0.0/25"
   availability_zone = "us-east-1a"
   map_public_ip_on_launch = true 
+  tags = {
+    Name = "public-subnet-test"
+  }
+}
+
+resource "aws_subnet" "private-subnet-test" {
+  vpc_id = aws_vpc.test-vpc.id
+  cidr_block = var.subnet_prefix[1] 
+  availability_zone = "us-east-1a"
+  map_public_ip_on_launch = true 
+  tags = {
+    Name = "private-subnet-test"
+  }
 }
 
 resource "aws_security_group" "public-sg-test" {
@@ -81,4 +100,11 @@ resource "aws_instance" "ec2-test" {
               echo "<h1>Congrats! Terraform knowledge improved!</h1>" > /var/www/html/index.html
               EOF
 }
+
+output "server_public_ip" {
+  value = aws_instance.ec2-test.public_ip
+}
 #to be completed - add private subnet, elastic ip (try to print it out)
+#optionally hard code availability zone in ec2 and subnet to avoid randomization which causes communication hurdles
+# include outputs
+# note: -target flag can be used to target a single resource
