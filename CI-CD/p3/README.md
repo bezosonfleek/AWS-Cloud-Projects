@@ -219,7 +219,7 @@ http://YOUR-BUCKET-NAME.s3-website-YOUR-REGION.amazonaws.com
 
 ---
 
-## Common Errors
+## Errors I faced
 
 | Error | Cause | Fix |
 |---|---|---|
