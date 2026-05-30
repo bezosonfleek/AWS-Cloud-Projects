@@ -38,11 +38,11 @@ CI-CD/p3/
 
 ## Tech Stack
 
-- **Frontend** — Vanilla HTML/CSS, DM Mono font (Google Fonts)
-- **Hosting** — AWS S3 (static website hosting)
-- **CDN** — AWS CloudFront (optional but recommended)
-- **CI/CD** — GitHub Actions
-- **Linting** — htmlhint
+- **Frontend** - Vanilla HTML/CSS, DM Mono font (Google Fonts)
+- **Hosting** - AWS S3 (static website hosting)
+- **CDN** - AWS CloudFront (optional but recommended)
+- **CI/CD** - GitHub Actions
+- **Linting** - htmlhint
 
 ---
 
