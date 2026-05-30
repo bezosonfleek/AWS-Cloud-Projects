@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Micro-Review Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F4F0E8;
+    --ink: #1C1917;
+    --ink-muted: #78716C;
+    --ink-faint: #D6D0C4;
+    --paper: #FDFAF4;
+    --paper-dark: #EDE8DC;
+    --accent: #C2410C;
+    --border: rgba(28,25,23,0.12);
+
+    /* Badge palette */
+    --badge-fire: #FEF3C7;
+    --badge-fire-text: #92400E;
+    --badge-mind: #EDE9FE;
+    --badge-mind-text: #5B21B6;
+    --badge-heart: #FCE7F3;
+    --badge-heart-text: #9D174D;
+    --badge-meh: #F3F4F6;
+    --badge-meh-text: #4B5563;
+    --badge-sleep: #DBEAFE;
+    --badge-sleep-text: #1E40AF;
+  }
+
+  html { font-size: 16px; }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(194,65,12,0.04) 0%, transparent 50%),
+      radial-gradient(circle at 85% 80%, rgba(91,33,182,0.03) 0%, transparent 50%);
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3.5rem 2rem 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .logo-block { flex: 1; }
+
+  .logo-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-bottom: 0.4rem;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .logo em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .header-meta {
+    text-align: right;
+    padding-top: 0.2rem;
+  }
+
+  .entry-count {
+    font-size: 2rem;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--ink);
+  }
+
+  .entry-count-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-top: 0.2rem;
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    max-width: 780px;
+    margin: 2rem auto 0;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    margin-right: 0.5rem;
+  }
+
+  .filter-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.05em;
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    max-width: 780px;
+    margin: 1.5rem auto;
+    padding: 0 2rem;
+  }
+
+  .divider hr {
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── ADD FORM ── */
+  .add-form {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 2rem 1.5rem;
+  }
+
+  .form-toggle {
+    background: none;
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    width: 100%;
+    padding: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    text-align: left;
+  }
+
+  .form-toggle:hover {
+    border-color: var(--ink-muted);
+    color: var(--ink);
+  }
+
+  .form-toggle .plus {
+    font-size: 1rem;
+    margin-right: 0.5rem;
+    line-height: 1;
+    vertical-align: middle;
+  }
+
+  .form-panel {
+    display: none;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 0.75rem;
+    animation: slideDown 0.2s ease;
+  }
+
+  .form-panel.open { display: block; }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .form-row.full { grid-template-columns: 1fr; }
+
+  .form-field { display: flex; flex-direction: column; gap: 0.3rem; }
+
+  .form-field label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.5rem 0.75rem;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.15s;
+    resize: none;
+  }
+
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-color: var(--ink-muted);
+  }
+
+  /* EMOJI PICKER */
+  .emoji-picker {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .emoji-opt {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: var(--bg);
+  }
+
+  .emoji-opt:hover { border-color: var(--ink-muted); }
+  .emoji-opt.selected { border-color: var(--ink); background: var(--paper-dark); }
+
+  .emoji-opt input[type=radio] { display: none; }
+
+  .emoji-opt .em { font-size: 1rem; }
+  .emoji-opt .em-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+    text-transform: uppercase;
+  }
+
+  .form-submit {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    border-radius: 6px;
+    padding: 0.6rem 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s;
+    margin-top: 0.75rem;
+  }
+
+  .form-submit:hover { opacity: 0.75; }
+
+  /* ── LOG LIST ── */
+  .log-list {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  /* ── ENTRY CARD ── */
+  .entry {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    align-items: start;
+    transition: box-shadow 0.15s, transform 0.15s;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .entry:hover {
+    box-shadow: 0 2px 12px rgba(28,25,23,0.07);
+    transform: translateY(-1px);
+  }
+
+  .entry.hidden { display: none; }
+
+  /* TYPE ICON */
+  .entry-type {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .entry-type.book { background: #FEF9C3; }
+  .entry-type.movie { background: #DBEAFE; }
+  .entry-type.show { background: #FCE7F3; }
+
+  /* ENTRY BODY */
+  .entry-body { min-width: 0; }
+
+  .entry-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .entry-meta {
+    font-size: 0.65rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+
+  .entry-meta span { margin-right: 0.75rem; }
+
+  .entry-note {
+    font-size: 0.75rem;
+    color: var(--ink-muted);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* ENTRY RIGHT */
+  .entry-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  /* RATING BADGE */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 999px;
+    padding: 0.25rem 0.65rem;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .badge.fire    { background: var(--badge-fire);  color: var(--badge-fire-text); }
+  .badge.mind    { background: var(--badge-mind);  color: var(--badge-mind-text); }
+  .badge.heart   { background: var(--badge-heart); color: var(--badge-heart-text); }
+  .badge.meh     { background: var(--badge-meh);   color: var(--badge-meh-text); }
+  .badge.sleep   { background: var(--badge-sleep); color: var(--badge-sleep-text); }
+
+  .entry-date {
+    font-size: 0.6rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+  }
+
+  .entry-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.7rem;
+    color: var(--ink-faint);
+    padding: 0;
+    transition: color 0.15s;
+    line-height: 1;
+  }
+
+  .entry-delete:hover { color: var(--accent); }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--ink-muted);
+  }
+
+  .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+
+  .empty-state p {
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 1rem 2rem 2rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .site-footer p {
+    font-size: 0.6rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 600px) {
+    .site-header { flex-direction: column; gap: 0.5rem; }
+    .header-meta { text-align: left; }
+    .form-row { grid-template-columns: 1fr; }
+    .entry { grid-template-columns: auto 1fr; }
+    .entry-right { flex-direction: row; align-items: center; grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo-block">
+    <div class="logo-eyebrow">Personal catalog</div>
+    <div class="logo">Micro<em>·</em>Review<br>Log</div>
+  </div>
+  <div class="header-meta">
+    <div class="entry-count" id="entryCount">0</div>
+    <div class="entry-count-label">entries logged</div>
+  </div>
+</header>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Show</span>
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="book">📚 Books</button>
+  <button class="filter-btn" data-filter="movie">🎬 Movies</button>
+  <button class="filter-btn" data-filter="show">📺 Shows</button>
+  <button class="filter-btn" data-filter="fire">🔥 Fire</button>
+  <button class="filter-btn" data-filter="mind">🧠 Mind-bending</button>
+  <button class="filter-btn" data-filter="heart">💛 Wholesome</button>
+  <button class="filter-btn" data-filter="meh">😐 Meh</button>
+  <button class="filter-btn" data-filter="sleep">💤 DNF</button>
+</div>
+
+<div class="divider"><hr></div>
+
+<!-- ADD FORM -->
+<div class="add-form">
+  <button class="form-toggle" id="formToggle">
+    <span class="plus">+</span> Log a new entry
+  </button>
+  <div class="form-panel" id="formPanel">
+    <div class="form-row">
+      <div class="form-field">
+        <label>Title</label>
+        <input type="text" id="inputTitle" placeholder="e.g. Dune, Inception...">
+      </div>
+      <div class="form-field">
+        <label>Creator / Director / Author</label>
+        <input type="text" id="inputCreator" placeholder="e.g. Frank Herbert">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label>Type</label>
+        <select id="inputType">
+          <option value="book">📚 Book</option>
+          <option value="movie">🎬 Movie</option>
+          <option value="show">📺 Show</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Year</label>
+        <input type="text" id="inputYear" placeholder="e.g. 2024">
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-field">
+        <label>Rating</label>
+        <div class="emoji-picker" id="emojiPicker">
+          <label class="emoji-opt selected" data-value="fire">
+            <input type="radio" name="rating" value="fire" checked>
+            <span class="em">🔥</span><span class="em-label">Fire</span>
+          </label>
+          <label class="emoji-opt" data-value="mind">
+            <input type="radio" name="rating" value="mind">
+            <span class="em">🧠</span><span class="em-label">Mind-bending</span>
+          </label>
+          <label class="emoji-opt" data-value="heart">
+            <input type="radio" name="rating" value="heart">
+            <span class="em">💛</span><span class="em-label">Wholesome</span>
+          </label>
+          <label class="emoji-opt" data-value="meh">
+            <input type="radio" name="rating" value="meh">
+            <span class="em">😐</span><span class="em-label">Meh</span>
+          </label>
+          <label class="emoji-opt" data-value="sleep">
+            <input type="radio" name="rating" value="sleep">
+            <span class="em">💤</span><span class="em-label">DNF</span>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-row full">
+      <div class="form-field">
+        <label>One-line note (optional)</label>
+        <textarea id="inputNote" rows="2" placeholder="What stuck with you?"></textarea>
+      </div>
+    </div>
+    <button class="form-submit" id="submitBtn">Log it →</button>
+  </div>
+</div>
+
+<!-- LOG LIST -->
+<div class="log-list" id="logList">
+  <div class="empty-state" id="emptyState">
+    <div class="empty-icon">📖</div>
+    <p>Nothing logged yet.<br>Add a book, movie, or show above.</p>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p>Micro·Review Log</p>
+  <p>Your personal catalog</p>
+</footer>
+
+<script>
+  // ── DATA ──────────────────────────────────────────────────────
+  const STORAGE_KEY = 'micro-review-log';
+  let entries = [];
+
+  const RATINGS = {
+    fire:  { emoji: '🔥', label: 'Fire' },
+    mind:  { emoji: '🧠', label: 'Mind-bending' },
+    heart: { emoji: '💛', label: 'Wholesome' },
+    meh:   { emoji: '😐', label: 'Meh' },
+    sleep: { emoji: '💤', label: 'DNF' }
+  };
+
+  const TYPE_ICONS = { book: '📚', movie: '🎬', show: '📺' };
+
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(entries)); } catch(e) {}
+  }
+
+  function load() {
+    try {
+      const d = localStorage.getItem(STORAGE_KEY);
+      if (d) entries = JSON.parse(d);
+    } catch(e) { entries = []; }
+  }
+
+  // ── SEED DATA ─────────────────────────────────────────────────
+  const seeds = [
+    { id: 1, title: 'Dune', creator: 'Frank Herbert', type: 'book', year: '1965', rating: 'mind', note: 'The spice must flow. Dense but rewarding.', date: '2024-11-03' },
+    { id: 2, title: 'Parasite', creator: 'Bong Joon-ho', type: 'movie', year: '2019', rating: 'fire', note: 'Perfect film. No notes.', date: '2024-11-12' },
+    { id: 3, title: 'Severance', creator: 'Ben Stiller', type: 'show', year: '2022', rating: 'mind', note: 'Work-life balance taken too literally.', date: '2024-12-01' },
+    { id: 4, title: 'The Alchemist', creator: 'Paulo Coelho', type: 'book', year: '1988', rating: 'heart', note: 'Simple, warm, quietly motivating.', date: '2025-01-08' },
+    { id: 5, title: 'Asteroid City', creator: 'Wes Anderson', type: 'movie', year: '2023', rating: 'meh', note: 'Beautiful to look at, nothing to hold.', date: '2025-02-14' },
+  ];
+
+  // ── RENDER ────────────────────────────────────────────────────
+  let activeFilter = 'all';
+
+  function formatDate(iso) {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  }
+
+  function createCard(entry) {
+    const r = RATINGS[entry.rating];
+    const visible = activeFilter === 'all' || activeFilter === entry.type || activeFilter === entry.rating;
+
+    const card = document.createElement('div');
+    card.className = 'entry' + (visible ? '' : ' hidden');
+    card.dataset.id = entry.id;
+    card.dataset.type = entry.type;
+    card.dataset.rating = entry.rating;
+
+    card.innerHTML = `
+      <div class="entry-type ${entry.type}">${TYPE_ICONS[entry.type]}</div>
+      <div class="entry-body">
+        <div class="entry-title">${entry.title}</div>
+        <div class="entry-meta">
+          <span>${entry.creator || '—'}</span>
+          <span>${entry.year || '—'}</span>
+          <span style="text-transform:capitalize">${entry.type}</span>
+        </div>
+        ${entry.note ? `<div class="entry-note">"${entry.note}"</div>` : ''}
+      </div>
+      <div class="entry-right">
+        <span class="badge ${entry.rating}">${r.emoji} ${r.label}</span>
+        <span class="entry-date">${formatDate(entry.date)}</span>
+        <button class="entry-delete" data-id="${entry.id}" title="Remove">✕</button>
+      </div>
+    `;
+
+    card.querySelector('.entry-delete').addEventListener('click', (e) => {
+      e.stopPropagation();
+      removeEntry(entry.id);
+    });
+
+    return card;
+  }
+
+  function render() {
+    const list = document.getElementById('logList');
+    const empty = document.getElementById('emptyState');
+    const count = document.getElementById('entryCount');
+
+    // Remove existing cards (not empty state)
+    list.querySelectorAll('.entry').forEach(el => el.remove());
+
+    if (entries.length === 0) {
+      empty.style.display = 'block';
+      count.textContent = '0';
+      return;
+    }
+
+    empty.style.display = 'none';
+    count.textContent = entries.length;
+
+    // Newest first
+    [...entries].reverse().forEach(e => {
+      list.appendChild(createCard(e));
+    });
+
+    applyFilter();
+  }
+
+  function applyFilter() {
+    document.querySelectorAll('.entry').forEach(card => {
+      const match = activeFilter === 'all'
+        || card.dataset.type === activeFilter
+        || card.dataset.rating === activeFilter;
+      card.classList.toggle('hidden', !match);
+    });
+
+    // Show empty state if nothing visible
+    const visible = document.querySelectorAll('.entry:not(.hidden)').length;
+    document.getElementById('emptyState').style.display = visible === 0 && entries.length > 0 ? 'block' : 'none';
+    if (visible === 0 && entries.length > 0) {
+      document.getElementById('emptyState').querySelector('p').textContent = 'No entries match this filter.';
+    }
+  }
+
+  // ── ADD ENTRY ─────────────────────────────────────────────────
+  function addEntry() {
+    const title = document.getElementById('inputTitle').value.trim();
+    if (!title) {
+      document.getElementById('inputTitle').focus();
+      return;
+    }
+
+    const rating = document.querySelector('input[name="rating"]:checked')?.value || 'fire';
+
+    const entry = {
+      id: Date.now(),
+      title,
+      creator: document.getElementById('inputCreator').value.trim(),
+      type: document.getElementById('inputType').value,
+      year: document.getElementById('inputYear').value.trim(),
+      rating,
+      note: document.getElementById('inputNote').value.trim(),
+      date: new Date().toISOString().split('T')[0]
+    };
+
+    entries.push(entry);
+    save();
+    render();
+
+    // Reset form
+    document.getElementById('inputTitle').value = '';
+    document.getElementById('inputCreator').value = '';
+    document.getElementById('inputYear').value = '';
+    document.getElementById('inputNote').value = '';
+    document.querySelector('input[name="rating"][value="fire"]').checked = true;
+    document.querySelectorAll('.emoji-opt').forEach(o => o.classList.remove('selected'));
+    document.querySelector('.emoji-opt[data-value="fire"]').classList.add('selected');
+
+    // Close panel
+    document.getElementById('formPanel').classList.remove('open');
+  }
+
+  function removeEntry(id) {
+    entries = entries.filter(e => e.id !== id);
+    save();
+    render();
+  }
+
+  // ── EVENT LISTENERS ───────────────────────────────────────────
+
+  // Form toggle
+  document.getElementById('formToggle').addEventListener('click', () => {
+    document.getElementById('formPanel').classList.toggle('open');
+  });
+
+  // Submit
+  document.getElementById('submitBtn').addEventListener('click', addEntry);
+
+  // Enter key in title
+  document.getElementById('inputTitle').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addEntry();
+  });
+
+  // Emoji picker
+  document.getElementById('emojiPicker').addEventListener('click', e => {
+    const opt = e.target.closest('.emoji-opt');
+    if (!opt) return;
+    document.querySelectorAll('.emoji-opt').forEach(o => o.classList.remove('selected'));
+    opt.classList.add('selected');
+  });
+
+  // Filters
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilter();
+      document.getElementById('emptyState').querySelector('p').innerHTML =
+        entries.length === 0
+          ? 'Nothing logged yet.<br>Add a book, movie, or show above.'
+          : 'No entries match this filter.';
+    });
+  });
+
+  // ── INIT ──────────────────────────────────────────────────────
+  load();
+  if (entries.length === 0) entries = seeds; // seed on first load
+  save();
+  render();
+</script>
+</body>
+</html>
