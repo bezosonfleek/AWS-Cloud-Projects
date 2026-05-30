@@ -255,7 +255,7 @@ All pages share the same design system:
 
 ---
 
-## Author
+## AUTHOR
 
 **bezosonfleek** · [github.com/bezosonfleek](https://github.com/bezosonfleek)
 **Site:** · [https://d8y6oxlxn4izn.cloudfront.net/]https://d8y6oxlxn4izn.cloudfront.net/)
