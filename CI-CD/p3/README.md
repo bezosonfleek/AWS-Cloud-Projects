@@ -239,7 +239,7 @@ http://YOUR-BUCKET-NAME.s3-website-YOUR-REGION.amazonaws.com
 
 **Custom domain** — add a CNAME at your DNS provider pointing to the CloudFront distribution URL, then add the domain to CloudFront's alternate domain names.
 
-**Update stack pages** — each `k8s.html`, `aws.html`, `docker.html`, `terraform.html` is self-contained. Edit the tags, terminal commands, and description to match your actual experience.
+**Update stack pages** — each `k8s.html`, `aws.html`, `docker.html`, `terraform.html` is self-contained. Edit the tags, terminal commands and description to match your actual experience.
 
 ---
 
