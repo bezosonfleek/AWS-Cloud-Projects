@@ -219,7 +219,7 @@ http://YOUR-BUCKET-NAME.s3-website-YOUR-REGION.amazonaws.com
 
 ---
 
-## Errors I faced
+## Errors I faced in the process
 
 | Error | Cause | Fix |
 |---|---|---|
@@ -231,7 +231,7 @@ http://YOUR-BUCKET-NAME.s3-website-YOUR-REGION.amazonaws.com
 
 ---
 
-## Customisation
+## Customisation 
 
 **Change the folder path** — update `paths` and `aws s3 sync` in `deploy.yml` to match your structure.
 
