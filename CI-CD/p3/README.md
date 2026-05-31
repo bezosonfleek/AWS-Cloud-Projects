@@ -32,7 +32,7 @@ AWS-Cloud-Projects/
         └── .htmlhintrc       ← HTML lint config
 ```
 
-> **Important:** `deploy.yml` must live at the repo root under `.github/workflows/` — not inside a subfolder. GitHub Actions only reads workflows from the root level.
+> **Important:** `deploy.yml` must live at the repo root under `.github/workflows/` - not inside a subfolder. GitHub Actions only reads workflows from the root level.
 
 ---
 
