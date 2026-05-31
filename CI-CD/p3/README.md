@@ -92,7 +92,7 @@ aws s3 website s3://YOUR-BUCKET-NAME \
   --error-document error.html
 ```
 
-> Keep **Block all public access ON** — the bucket will be private, only accessible through CloudFront via OAC.
+> Keep **Block all public access ON** - the bucket will be private, only accessible through CloudFront via OAC.
 
 ### 3. Create a CloudFront distribution
 
@@ -101,7 +101,7 @@ aws s3 website s3://YOUR-BUCKET-NAME \
   ```
   YOUR-BUCKET-NAME.s3.us-east-1.amazonaws.com
   ```
-  > Do NOT use the `s3-website` endpoint — OAC won't work with it
+  > Do NOT use the `s3-website` endpoint - OAC won't work with it
 - **Origin access** → select **Origin access control settings (recommended)**
 - Click **Create new OAC** → accept defaults → Create
 - **Default root object** → `index.html`
