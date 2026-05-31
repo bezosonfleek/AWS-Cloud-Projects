@@ -1,4 +1,4 @@
-# CI/CD Static Site — GitHub Actions + AWS S3 + CloudFront
+# CI/CD Static Site - GitHub Actions + AWS S3 + CloudFront
 
 A collection of static HTML pages deployed automatically to AWS S3 via GitHub Actions, served globally through CloudFront with OAC (Origin Access Control).
 
