@@ -40,7 +40,7 @@ To prevent driver compatibility issues or broken snapshots during the migration 
 
 3. Isolate OS and Storage Volumes: Provision operating systems on a primary drive, and split heavy write paths onto dedicated secondary virtual data disks.
 
-4. **Replication Setup**
+## 4. Replication Setup
    Once the Proxmox architecture is stable, the replication pipeline is initialized by issuing temporary, restricted IAM credentials and running the AWS replication agent setup on each live local virtual machine:
    ```bash
    wget -O aws-replication-installer-init.py [https://aws-application-migration-service-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/aws-replication-installer-init.py](https://aws-application-migration-service-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/aws-replication-installer-init.py)
