@@ -1,6 +1,7 @@
 # Hybrid Cloud Migration Playbook: Proxmox to AWS 
+---
   - Plan for now, execution to follow
-
+---
 This repository tracks the end-to-end migration strategy, architecture blueprints, and deployment configurations used to design, run, and transition a multi-tier production environment from an on-premises Proxmox VE cluster over to Amazon Web Services (AWS).
 
 ## 1. Migration Strategy Overview
