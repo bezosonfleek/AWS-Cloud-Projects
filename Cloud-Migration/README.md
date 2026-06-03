@@ -1,7 +1,3 @@
-# Just a plan for now, execution to happen in a few days
-
----
-
 # Hybrid Cloud Migration Playbook: Proxmox to AWS
 
 This repository tracks the end-to-end migration strategy, architecture blueprints, and deployment configurations used to design, run, and transition a multi-tier production environment from an on-premises Proxmox VE cluster over to Amazon Web Services (AWS).
@@ -38,3 +34,15 @@ To prevent driver compatibility issues or broken snapshots during the migration 
 1. **Enable the QEMU Guest Agent:** Toggle the `Qemu Guest Agent` checkbox under options, and install the daemon inside the guest OS:
    ```bash
    sudo apt update && sudo apt install qemu-guest-agent -y
+
+2. Standardize on VirtIO Hardware: Configure storage controllers to use VirtIO SCSI and network cards to use VirtIO networking/storage drivers. 
+   This ensures that guest kernels are already using drivers analogous to AWS Nitro NVMe and ENA standards.
+
+3. Isolate OS and Storage Volumes: Provision operating systems on a primary drive, and split heavy write paths onto dedicated secondary virtual data disks.
+
+4. **Replication Setup**
+   Once the Proxmox architecture is stable, the replication pipeline is initialized by issuing temporary, restricted IAM credentials and running the AWS replication agent setup on each live local virtual machine:
+   ```bash
+   wget -O aws-replication-installer-init.py [https://aws-application-migration-service-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/aws-replication-installer-init.py](https://aws-application-migration-service-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/aws-replication-installer-init.py)
+
+   sudo python3 aws-replication-installer-init.py --region us-east-1 --aws-access-key-id <IAM_KEY> --aws-secret-access-key <IAM_SECRET>
