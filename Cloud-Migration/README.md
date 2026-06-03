@@ -47,5 +47,5 @@ To prevent driver compatibility issues or broken snapshots during the migration 
    wget -O aws-replication-installer-init.py [https://aws-application-migration-service-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/aws-replication-installer-init.py](https://aws-application-migration-service-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/aws-replication-installer-init.py)
 
    sudo python3 aws-replication-installer-init.py --region us-east-1 --aws-access-key-id <IAM_KEY> --aws-secret-access-key <IAM_SECRET>
-
+   ```
 Note: Ensure outbound TCP ports 443 (for control communication) and 1500 (for block data streaming) are fully whitelisted on your local network firewall before executing the agent.
