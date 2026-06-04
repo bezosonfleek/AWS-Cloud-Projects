@@ -95,7 +95,44 @@ Start the VM, open the **Console** tab, and boot into the instance. Click the **
 sudo apt update && sudo apt install qemu-guest-agent -y
 ```
 
-Turn off the VM, right-click its name in the tree view, and select Convert to Template.
+Before converting, you must seal the VM to prevent all cloned production nodes from sharing the same internal machine identities, SSH fingerprint keys, and network lease history — which would cause DHCP IP conflicts across every node.
+
+**5a. Wipe Host Identifiers**
+
+Clear the current system identities so every clone generates unique IDs and network paths on first boot:
+
+```bash
+# Clean out apt cache to shrink clone storage footprint
+sudo apt clean && sudo apt autoremove -y
+
+# Erase unique SSH host fingerprints so clones don't duplicate keys
+sudo rm -f /etc/ssh/ssh_host_*
+
+# Clear the system machine ID to prevent DHCP lease collisions
+sudo truncate -s 0 /etc/machine-id
+sudo rm -f /var/lib/dbus/machine-id
+sudo ln -s /etc/machine-id /var/lib/dbus/machine-id
+```
+
+**5b. Purge Cloud-Init Logs & Machine Cache**
+
+Clear the temporary initialization footprint so subsequent boots are completely fresh:
+
+```bash
+sudo cloud-init clean --logs --seed
+```
+
+**5c. Power Off and Convert**
+
+Shut down directly from the terminal:
+
+```bash
+sudo poweroff
+```
+
+Once the VM shuts down completely and its status indicator turns grey in the Proxmox GUI, right-click **1000 (golden-ubu-cloud)** and select **Convert to Template**.
+
+---
 
 To prevent driver compatibility issues or broken snapshots during the migration window, all Proxmox nodes must follow these mandatory system configurations:
 
