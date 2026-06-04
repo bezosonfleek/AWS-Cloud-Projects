@@ -29,7 +29,12 @@ To ensure seamless driver and network translations when the workloads land in AW
 
 ---
 
-## 3. Mandatory Provisioning Rules (Day 1)
+## 3. Base Template & Mandatory Provisioning Rules & Mandatory Provisioning Rules
+Before deploying any instances, you must pull the official Canonical cloud-init image into your local template directory. Log into your Proxmox node shell and execute the following command:
+
+```bash
+cd /var/lib/vz/template/iso && wget [https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img](https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img)
+
 To prevent driver compatibility issues or broken snapshots during the migration window, all Proxmox nodes must follow these mandatory system configurations:
 
 1. **Enable the QEMU Guest Agent:** Toggle the `Qemu Guest Agent` checkbox under options, and install the daemon inside the guest OS:
@@ -41,7 +46,7 @@ To prevent driver compatibility issues or broken snapshots during the migration 
 
 3. Isolate OS and Storage Volumes: Provision operating systems on a primary drive, and split heavy write paths onto dedicated secondary virtual data disks.
 
-## 4. Replication Setup
+## 5. Replication Setup
    Once the Proxmox architecture is stable, the replication pipeline is initialized by issuing temporary, restricted IAM credentials and running the AWS replication agent setup on each live local virtual machine:
    ```bash
    wget -O aws-replication-installer-init.py [https://aws-application-migration-service-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/aws-replication-installer-init.py](https://aws-application-migration-service-us-east-1.s3.us-east-1.amazonaws.com/latest/linux/aws-replication-installer-init.py)
