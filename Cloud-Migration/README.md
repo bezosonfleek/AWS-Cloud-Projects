@@ -34,7 +34,7 @@ Before deploying any instances, you must pull the official Canonical cloud-init 
 
 ```bash
 cd /var/lib/vz/template/iso && wget [https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img](https://cloud-images.ubuntu.com/noble/current/noble-server-cloudimg-amd64.img)
-
+```
 To prevent driver compatibility issues or broken snapshots during the migration window, all Proxmox nodes must follow these mandatory system configurations:
 
 1. **Enable the QEMU Guest Agent:** Toggle the `Qemu Guest Agent` checkbox under options, and install the daemon inside the guest OS:
