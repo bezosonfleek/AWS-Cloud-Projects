@@ -53,6 +53,8 @@ Click Create VM in the top right of the GUI.
 
 5. Go directly to the VM's Hardware tab, select the placeholder Hard Disk, click Detach, and then click Remove to wipe it out entirely.
 
+6. **Add the Cloud-Init Drive:** Still in the Hardware tab of VM 1000, click **Add** and select **Cloud-Init Drive**. Set the storage pool to `local-lvm` and click **Add**. This device is required for automated guest provisioning — it injects SSH keys, user credentials, and network configuration into the VM at first boot without manual console interaction.
+
 ### Step 3: Run the Block Storage Import
 
 Because cloud-init .img files are raw virtual hard drives rather than bootable installation CD-ROMs, Proxmox must convert the file into a native block volume.
@@ -74,6 +76,8 @@ Mechanical Hard Drive (HDD) Optimization: Because this cluster is powered by sta
 Go to the Options tab, double-click Boot Order, check the box for scsi0, and drag it to the absolute top of the boot priority list.
 
 Storage Warning Note: When verifying this imported disk inside the Proxmox inventory tabs, the virtual hardware configuration will read 3.5 GiB despite the download file measuring only 627 MiB. This is completely normal behavior. The 627 MiB file is a compressed, thin-provisioned archive for easy delivery; the 1st layer block translation extracts it instantly to its uncompressed, actual OS framework.
+
+**Secondary Storage Allocation for `03-database-srv` and `04-shared-storage`:** Once these VMs are cloned and running, navigate to their respective **Hardware** tabs, click **Add**, and select **Hard Disk**. Set the Bus/Device to **SCSI**. As with the primary disk, leave **Discard** and **SSD Emulation** unchecked for HDD-backed storage pools to preserve native mechanical elevator scheduling. Allocate an appropriately sized secondary data drive to each node. This keeps all heavy transactional write paths (database data files, NFS exports) isolated from the OS disk, preventing I/O contention and simplifying snapshot management.
 
 ### Step 5: Finalize & Convert
 
@@ -124,3 +128,31 @@ sudo python3 aws-replication-installer-init.py --region us-east-1 --aws-access-k
 ```
 
 Note: Ensure outbound TCP ports 443 (for control communication) and 1500 (for block data streaming) are fully whitelisted on your local network firewall before executing the agent.
+
+---
+
+## 6. Cutover Validation & Fallback Procedures
+
+Before live traffic redirection, execute continuous validation testing across the following three checkpoints. All three must pass cleanly before public DNS records are touched.
+
+### AWS Target Group Routing Validation
+Verify that each EC2 instance registered behind the Application Load Balancer is returning a healthy status in the AWS Target Group console. Confirm that routing rules correctly distribute requests to the `02-app-backend` compute layer and that no targets are in a draining or unhealthy state.
+
+### Security Group Ingress Boundary Verification
+Audit all Security Group inbound rules against the intended network topology. Confirm that:
+* The public-facing ALB accepts inbound traffic on ports 80 and 443 only.
+* The `02-app-backend` and `06-bg-worker` instances are reachable exclusively from within the private application subnet — not from the public internet.
+* The `03-database-srv` RDS instance accepts connections only from the private app subnet CIDR, with no public accessibility enabled.
+* The `05-msg-queue` ElastiCache endpoint is locked to internal VPC traffic only.
+
+### Production Database Parity Checking
+Prior to cutover, run a row-count and checksum comparison between the live Proxmox `03-database-srv` PostgreSQL instance and the target Amazon RDS instance to confirm transactional consistency. Verify that the final replicated snapshot contains no missing tables, orphaned foreign keys, or sequence drift on primary key columns.
+
+### Phase 4 Rollback Procedure
+If production sync failures, critical API connection timeouts, or failed health checks emerge at any point during the DNS cutover window, execute the following rollback sequence immediately:
+
+1. **Halt DNS propagation** — if the TTL change has not yet fully propagated, revert the public DNS A record to point back to the on-premises Proxmox `01-web-frontend` public gateway IP (`10.0.1.10`) before any further changes are made.
+2. **Re-enable on-premises traffic routing** — confirm the local Nginx gateway is still active and accepting connections. If it was shut down as part of the cutover, bring it back up immediately.
+3. **Suspend the AWS MGN cutover job** — return to the AWS MGN console, select the affected source servers, and revert them to a pre-cutover replication state to prevent the staging instances from being finalized as production.
+4. **Preserve the failed AWS instance state** — do not terminate EC2 instances or snapshots created during the failed cutover. Retain them for post-incident diagnostics to identify the root cause before reattempting.
+5. **Document the failure point** — log the exact stage at which the failure occurred (Target Group health, Security Group rejection, DB parity mismatch, or DNS propagation error) to inform the remediation plan before scheduling a second cutover window.
