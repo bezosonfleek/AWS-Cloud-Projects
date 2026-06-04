@@ -53,7 +53,15 @@ Click Create VM in the top right of the GUI.
 
 5. Go directly to the VM's Hardware tab, select the placeholder Hard Disk, click Detach, and then click Remove to wipe it out entirely.
 
-6. **Add the Cloud-Init Drive:** Still in the Hardware tab of VM 1000, click **Add** and select **Cloud-Init Drive**. Set the storage pool to `local-lvm` and click **Add**. This device is required for automated guest provisioning — it injects SSH keys, user credentials, and network configuration into the VM at first boot without manual console interaction.
+6. **Add the Cloud-Init Drive:** Still in the Hardware tab of VM 1000, click **Add** and select **Cloud-Init Drive**. Set the storage pool to `local-lvm` (or whichever storage pool holds your VM disks) and click **Add**. The device will appear in your hardware list as something like `ide0` or `sata0` with a type of `cloudinit`. This device is required for automated guest provisioning — it injects SSH keys, user credentials, and network configuration into the VM at first boot without manual console interaction.
+
+### Step 2a: Configure Cloud-Init Credentials
+
+With the Cloud-Init Drive now attached, navigate to the **Cloud-Init** tab of VM 1000 to set the login credentials that will be baked into the virtual configuration drive before first boot.
+
+1. Double-click the **User** line, type your desired username (e.g., `ubuntu` or `admin`), and click **OK**.
+2. Double-click the **Password** line, type your secure password, and click **OK**.
+3. **Critical:** Click the **Regenerate Image** button at the top of the Cloud-Init tab. This compiles your username, password, and any configured SSH keys into the attached `cloudinit` drive. Without this step, the credentials are not written to the device and the VM will boot with no valid login.
 
 ### Step 3: Run the Block Storage Import
 
@@ -81,7 +89,7 @@ Storage Warning Note: When verifying this imported disk inside the Proxmox inven
 
 ### Step 5: Finalize & Convert
 
-Start the VM, open the Console, log in using your cloud-init user, and execute the guest environment updates:
+Start the VM, open the **Console** tab, and boot into the instance. Click the **Shutdown** dropdown at the top right and select **Reset** (or **Stop** followed by **Start**) to trigger a clean boot cycle with the Cloud-Init drive active. Let the boot text scroll through — when the login prompt appears, enter the username and password you configured in Step 2a. Then execute the guest environment updates:
 
 ```bash
 sudo apt update && sudo apt install qemu-guest-agent -y
