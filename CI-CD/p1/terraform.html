@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terraform · Tech Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #7b42f6;
+    --accent-dim: rgba(123,66,246,0.08);
+    --accent-border: rgba(123,66,246,0.25);
+    --bg: #0f1117;
+    --surface: #1a1f2e;
+    --border: #2d3748;
+    --text: #e2e8f0;
+    --muted: #718096;
+    --faint: #4a5568;
+    --fainter: #2d3748;
+  }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .card {
+    max-width: 660px;
+    width: 100%;
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(123,66,246,0.05);
+  }
+
+  .card-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .dot.r { background: #fc5c65; }
+  .dot.y { background: #fed330; }
+  .dot.g { background: #26de81; }
+
+  .bar-label { font-size: 0.65rem; color: var(--faint); letter-spacing: 0.1em; margin-left: 0.5rem; }
+  .bar-label span { color: var(--accent); }
+
+  .hero {
+    padding: 3rem 2.5rem 2rem;
+    text-align: center;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-logo {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.04;
+    pointer-events: none;
+  }
+
+  .tf-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+  }
+
+  .tool-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    padding: 0.3rem 1rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .blink {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .tool-name { font-size: 2.2rem; font-weight: 500; color: var(--text); margin-bottom: 0.4rem; position: relative; }
+  .tool-version { font-size: 0.65rem; color: var(--faint); letter-spacing: 0.15em; margin-bottom: 1.5rem; }
+
+  .tool-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 44ch;
+    margin: 0 auto 2rem;
+  }
+  .tool-desc strong { color: var(--accent); font-weight: 400; }
+
+  .tags {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.65rem;
+    color: var(--faint);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  .terminal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    text-align: left;
+    margin: 0 2.5rem 2.5rem;
+  }
+
+  .t-line { font-size: 0.7rem; line-height: 2; display: flex; gap: 0.6rem; }
+  .prompt { color: var(--accent); flex-shrink: 0; }
+  .cmd { color: #a0aec0; }
+  .comment { color: var(--fainter); }
+
+  .nav-row {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 0.9rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-links { display: flex; gap: 1rem; }
+
+  .nav-link {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--accent); }
+  .nav-link.active { color: var(--accent); }
+
+  .nav-right { font-size: 0.6rem; color: var(--fainter); letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="card-bar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="bar-label">tech-stack · <span>terraform</span></span>
+  </div>
+
+  <div class="hero">
+
+    <!-- Background watermark -->
+    <svg class="hero-bg-logo" viewBox="0 0 120 136" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="60,0 120,34 120,102 60,136 0,102 0,34" fill="#7b42f6"/>
+      <polygon points="35,38 35,72 60,86 60,52" fill="white"/>
+      <polygon points="65,52 65,86 90,72 90,38" fill="white"/>
+      <polygon points="35,80 35,98 60,112 60,94" fill="white"/>
+    </svg>
+
+    <div class="tool-badge"><span class="blink"></span> In my stack</div>
+
+    <!-- SVG diamond icon inline with name -->
+    <div class="tool-name" style="display:flex;align-items:center;justify-content:center;gap:0.75rem;">
+      <svg class="tf-icon" viewBox="0 0 120 136" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="60,0 120,34 120,102 60,136 0,102 0,34" fill="#7b42f6"/>
+        <polygon points="35,38 35,72 60,86 60,52" fill="white"/>
+        <polygon points="65,52 65,86 90,72 90,38" fill="white"/>
+        <polygon points="35,80 35,98 60,112 60,94" fill="white"/>
+      </svg>
+      Terraform
+    </div>
+    <div class="tool-version">v1.7.x · Infrastructure as Code · HashiCorp</div>
+    <p class="tool-desc">
+      I use <strong>Terraform</strong> to define and provision cloud infrastructure as code - writing HCL to manage AWS resources, maintaining state remotely, and keeping infrastructure reproducible, versioned, and reviewable like any other codebase.
+    </p>
+    <div class="tags">
+      <span class="tag">HCL</span>
+      <span class="tag">Providers</span>
+      <span class="tag">Resources</span>
+      <span class="tag">Variables</span>
+      <span class="tag">Outputs</span>
+      <span class="tag">Modules</span>
+      <span class="tag">Remote State</span>
+      <span class="tag">Workspaces</span>
+      <span class="tag">Plan / Apply</span>
+    </div>
+  </div>
+
+  <div class="terminal">
+    <div class="t-line"><span class="prompt">$</span><span class="cmd">terraform init</span></div>
+    <div class="t-line"><span class="prompt"> </span><span class="comment"># Initializing provider plugins...</span></div>
+    <div class="t-line"><span class="prompt"> </span><span class="comment"># Terraform has been successfully initialized ✓</span></div>
+    <div class="t-line"><span class="prompt">$</span><span class="cmd">terraform plan</span></div>
+    <div class="t-line"><span class="prompt"> </span><span class="comment"># Plan: 4 to add, 0 to change, 0 to destroy</span></div>
+    <div class="t-line"><span class="prompt">$</span><span class="cmd">terraform apply -auto-approve</span></div>
+    <div class="t-line"><span class="prompt"> </span><span class="comment"># Apply complete! Resources: 4 added ✓</span></div>
+  </div>
+
+  <div class="nav-row">
+    <div class="nav-links">
+      <a class="nav-link" href="k8s.html">K8s</a>
+      <a class="nav-link" href="aws.html">AWS</a>
+      <a class="nav-link" href="docker.html">Docker</a>
+      <a class="nav-link active" href="terraform.html">Terraform</a>
+    </div>
+    <span class="nav-right">bezosonfleek · stack</span>
+  </div>
+
+</div>
+</body>
+</html>

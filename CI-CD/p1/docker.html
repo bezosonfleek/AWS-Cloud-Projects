@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Docker · Tech Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #2496ed;
+    --accent-dim: rgba(36,150,237,0.08);
+    --accent-border: rgba(36,150,237,0.25);
+    --bg: #0f1117;
+    --surface: #1a1f2e;
+    --border: #2d3748;
+    --text: #e2e8f0;
+    --muted: #718096;
+    --faint: #4a5568;
+    --fainter: #2d3748;
+  }
+
+  body {
+    font-family: 'DM Mono', monospace;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  .card {
+    max-width: 660px;
+    width: 100%;
+    border: 1px solid var(--accent-border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(36,150,237,0.05);
+  }
+
+  .card-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .dot { width: 9px; height: 9px; border-radius: 50%; }
+  .dot.r { background: #fc5c65; }
+  .dot.y { background: #fed330; }
+  .dot.g { background: #26de81; }
+
+  .bar-label { font-size: 0.65rem; color: var(--faint); letter-spacing: 0.1em; margin-left: 0.5rem; }
+  .bar-label span { color: var(--accent); }
+
+  .hero {
+    padding: 3rem 2.5rem 2rem;
+    text-align: center;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '🐳';
+    position: absolute;
+    font-size: 16rem;
+    opacity: 0.03;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .tool-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    border-radius: 999px;
+    padding: 0.3rem 1rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+
+  .blink {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent);
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+  .tool-name { font-size: 2.2rem; font-weight: 500; color: var(--text); margin-bottom: 0.4rem; position: relative; }
+  .tool-version { font-size: 0.65rem; color: var(--faint); letter-spacing: 0.15em; margin-bottom: 1.5rem; }
+
+  .tool-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 44ch;
+    margin: 0 auto 2rem;
+  }
+  .tool-desc strong { color: var(--accent); font-weight: 400; }
+
+  .tags {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
+
+  .tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.25rem 0.65rem;
+    color: var(--faint);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--accent); }
+
+  .terminal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.25rem;
+    text-align: left;
+    margin: 0 2.5rem 2.5rem;
+  }
+
+  .t-line { font-size: 0.7rem; line-height: 2; display: flex; gap: 0.6rem; }
+  .prompt { color: var(--accent); flex-shrink: 0; }
+  .cmd { color: #a0aec0; }
+  .comment { color: var(--fainter); }
+
+  .nav-row {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 0.9rem 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-links { display: flex; gap: 1rem; }
+
+  .nav-link {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--faint);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-link:hover { color: var(--accent); }
+  .nav-link.active { color: var(--accent); }
+
+  .nav-right { font-size: 0.6rem; color: var(--fainter); letter-spacing: 0.08em; }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <div class="card-bar">
+    <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+    <span class="bar-label">tech-stack · <span>docker</span></span>
+  </div>
+
+  <div class="hero">
+    <div class="tool-badge"><span class="blink"></span> In my stack</div>
+    <div class="tool-name">🐳 Docker</div>
+    <div class="tool-version">Docker 26.x · Containerization · OCI</div>
+    <p class="tool-desc">
+      I use <strong>Docker</strong> to package applications into portable containers — writing Dockerfiles, building images, and running multi-service environments with Docker Compose. Containers are how I keep environments consistent from dev to prod.
+    </p>
+    <div class="tags">
+      <span class="tag">Dockerfile</span>
+      <span class="tag">Images</span>
+      <span class="tag">Containers</span>
+      <span class="tag">Compose</span>
+      <span class="tag">Volumes</span>
+      <span class="tag">Networks</span>
+      <span class="tag">Docker Hub</span>
+      <span class="tag">ECR</span>
+    </div>
+  </div>
+
+  <div class="terminal">
+    <div class="t-line"><span class="prompt">$</span><span class="cmd">docker build -t app:latest .</span></div>
+    <div class="t-line"><span class="prompt"> </span><span class="comment"># Successfully built a1b2c3d4e5f6</span></div>
+    <div class="t-line"><span class="prompt">$</span><span class="cmd">docker run -d -p 80:80 app:latest</span></div>
+    <div class="t-line"><span class="prompt"> </span><span class="comment"># Container started ✓</span></div>
+    <div class="t-line"><span class="prompt">$</span><span class="cmd">docker ps</span></div>
+    <div class="t-line"><span class="prompt"> </span><span class="comment"># CONTAINER ID   IMAGE        STATUS</span></div>
+    <div class="t-line"><span class="prompt"> </span><span class="comment"># a1b2c3d4e5f6   app:latest   Up 2 minutes</span></div>
+  </div>
+
+  <div class="nav-row">
+    <div class="nav-links">
+      <a class="nav-link" href="k8s.html">K8s</a>
+      <a class="nav-link" href="aws.html">AWS</a>
+      <a class="nav-link active" href="docker.html">Docker</a>
+      <a class="nav-link" href="terraform.html">Terraform</a>
+    </div>
+    <span class="nav-right">bezosonfleek · stack</span>
+  </div>
+
+</div>
+</body>
+</html>
