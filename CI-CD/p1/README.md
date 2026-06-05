@@ -22,7 +22,7 @@ AWS-Cloud-Projects/
 │       └── deploy.yml        ← GitHub Actions pipeline (repo root)
 │
 └── CI-CD/
-    └── p3/
+    └── p1/
         ├── index.html        ← CI/CD pipeline success page
         ├── error.html        ← 404 / error page
         ├── k8s.html          ← Kubernetes stack page
@@ -57,7 +57,7 @@ All pages share the same dark terminal design system:
 ## Pipeline
 
 ```
-Push to CI-CD/p3/**
+Push to CI-CD/p1/**
         ↓
 GitHub Actions (ubuntu-latest)
         ↓
@@ -66,7 +66,7 @@ Checkout → Lint HTML → Configure AWS → Sync to S3 → Invalidate CloudFron
 Live on CloudFront
 ```
 
-The `paths` filter means the pipeline **only triggers** when files inside `CI-CD/p3/` change. Pushes to other folders are ignored.
+The `paths` filter means the pipeline **only triggers** when files inside `CI-CD/p1/` change. Pushes to other folders are ignored.
 
 ---
 
@@ -182,7 +182,7 @@ on:
     branches:
       - main
     paths:
-      - "CI-CD/p3/**"
+      - "CI-CD/p1/**"
 
 jobs:
   deploy:
@@ -196,7 +196,7 @@ jobs:
       - name: Lint HTML
         run: |
           npm install -g htmlhint --silent
-          htmlhint "CI-CD/p3/**/*.html" || true
+          htmlhint "CI-CD/p1/**/*.html" || true
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -207,7 +207,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./CI-CD/p3 s3://${{ secrets.S3_BUCKET_NAME }} \
+          aws s3 sync ./CI-CD/p1 s3://${{ secrets.S3_BUCKET_NAME }} \
             --exclude ".git/*" \
             --exclude ".github/*" \
             --delete \
@@ -237,7 +237,7 @@ Go to repo → **Actions tab** → watch the pipeline run. All steps should go g
 | Error | Cause | Fix |
 |---|---|---|
 | `No event triggers defined in on` | `deploy.yml` pushed empty | Add the full `on:` block and repush |
-| Pipeline doesn't trigger | `paths` filter — no matching files changed | Push a real change inside `CI-CD/p3/` |
+| Pipeline doesn't trigger | `paths` filter — no matching files changed | Push a real change inside `CI-CD/p1/` |
 | `Exit code 254` on CloudFront step | Wrong distribution ID or missing IAM permission | Use the ID not the URL; add `cloudfront:CreateInvalidation` to IAM policy |
 | `403 Forbidden` on CloudFront URL | OAC not configured or wrong S3 origin endpoint | Use REST endpoint, set up OAC, copy generated policy to S3 |
 | XML `AccessDenied` response | Default root object not set | CloudFront → General → set `index.html` as default root object |
@@ -255,7 +255,7 @@ OAC only works with the S3 REST endpoint (`bucket.s3.region.amazonaws.com`). The
 With a private S3 bucket behind OAC, when a requested file doesn't exist S3 returns 403 (not 404) to CloudFront — because it can't confirm whether the file exists or is just inaccessible. Map both to your error page.
 
 **Why the paths filter matters**
-Without it, every push to any folder in the repo triggers a deploy. With it, only changes to `CI-CD/p3/` fire the pipeline — other project folders are unaffected.
+Without it, every push to any folder in the repo triggers a deploy. With it, only changes to `CI-CD/p1/` fire the pipeline — other project folders are unaffected.
 
 **Why inline policy over managed policy**
 AWS managed CloudFront policies (`CloudFrontFullAccess`) grant way more than needed. A deploy user should only have `cloudfront:CreateInvalidation` — nothing else. No managed policy exists for just that action, so inline is the only correct approach.
